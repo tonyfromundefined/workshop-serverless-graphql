@@ -1,0 +1,9 @@
+{
+  "name": "serverless-graphql-workshop-server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/serverless-graphql-workshop",
+  "author": "tonyfromundefined",
+  "license": "MIT",
+  "private": false
+}
