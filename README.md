@@ -7,23 +7,23 @@
 
 ## 이런 기술 스택이 사용되었어요 🧐
 ### AWS 서비스
-- AWS API Gateway
-- AWS Lambda
-- AWS S3
-- AWS RDS
-- AWS Fargate
+- [AWS API Gateway](https://aws.amazon.com/ko/api-gateway/)
+- [AWS Lambda](https://aws.amazon.com/ko/lambda/)
+- [AWS S3](https://aws.amazon.com/ko/s3/)
+- [AWS RDS](https://aws.amazon.com/ko/rds/)
+- [AWS Fargate](https://aws.amazon.com/ko/fargate/)
 
 ### API
-- Node.js
-- Express.js
-- Apollo Server
-- Prisma Nexus
+- [Node.js](https://nodejs.org/en/about/)
+- [Express.js](https://expressjs.com/ko/)
+- [Apollo Server](https://www.apollographql.com/docs/apollo-server/)
+- [Prisma Nexus](https://nexus.js.org/)
 
 ### Data Layer with ORM
-- Prisma
+- [Prisma](https://www.prisma.io/)
 
 ### Database
-- MySQL
+- [MySQL](https://www.mysql.com/)
 
 ##  미리 준비해주세요
 ### 0. 본 Github Repository를 본인의 컴퓨터에 복사해주세요
