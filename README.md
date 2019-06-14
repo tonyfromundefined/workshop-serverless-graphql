@@ -1,10 +1,5 @@
 # 서버리스 GraphQL 워크샵 🍯
 
-## 본 실습 세션의 학습 목표는 아래와 같습니다. 👏
-- Serverless Framework을 활용해, Apollo Server를 API Gateway와 Lambda를 사용하여 배포한다.
-- RDS를 사용해 MySQL DB를 구성한다.
-- Fargate를 활용해 Prisma를 배포한다.
-
 ## 이런 기술 스택이 사용되었어요 🧐
 ### AWS 서비스
 - [AWS API Gateway](https://aws.amazon.com/ko/api-gateway/)
