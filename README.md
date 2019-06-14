@@ -1,8 +1,9 @@
 # 서버리스 GraphQL 워크샵 🍯
 
 ## 이런 기술 스택이 사용되었어요 🧐
+
 ### 언어 및 환경
-- [TypeScript](https://www.typescriptlang.org)
+- [TypeScript](https://www.typescriptlang.org) 👏
 - [Node.js](https://nodejs.org/en/about/)
 - [Babel](https://babeljs.io)
 - [Webpack](https://webpack.js.org/)
@@ -11,15 +12,15 @@
 ### API 서버
 - [Express.js](https://expressjs.com/ko/)
 - [Apollo Server](https://www.apollographql.com/docs/apollo-server/)
-- [Prisma Nexus](https://nexus.js.org/)
+- [Prisma Nexus](https://nexus.js.org/) 👏
 - [AWS API Gateway](https://aws.amazon.com/ko/api-gateway/)
 - [AWS Lambda](https://aws.amazon.com/ko/lambda/)
 - [AWS S3](https://aws.amazon.com/ko/s3/)
 
 ### Data Loader + ORM
 - [Docker](https://www.docker.com/)
-- [Prisma](https://www.prisma.io/)
-- [AWS Fargate](https://aws.amazon.com/ko/fargate/)
+- [Prisma](https://www.prisma.io/) 👏
+- [AWS Fargate](https://aws.amazon.com/ko/fargate/) 👏
 
 ### Database
 - [MySQL](https://www.mysql.com/)
@@ -31,9 +32,9 @@
 - [Apollo Client](https://github.com/apollographql/apollo-client)
 - [React Apollo](https://github.com/apollographql/react-apollo)
 - [React Apollo Hooks](https://github.com/trojanowski/react-apollo-hooks)
-- [GraphQL Code Generator](https://graphql-code-generator.com)
+- [GraphQL Code Generator](https://graphql-code-generator.com) 👏
 - [MobX 5](https://github.com/mobxjs/mobx)
-- [styled-components](https://www.styled-components.com)
+- [styled-components](https://www.styled-components.com) 👏
 
 
 ##  미리 준비해주세요
