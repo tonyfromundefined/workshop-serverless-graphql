@@ -13,6 +13,7 @@
 - [Express.js](https://expressjs.com/ko/)
 - [Apollo Server](https://www.apollographql.com/docs/apollo-server/)
 - [Prisma Nexus](https://nexus.js.org/) 👏
+- [Serverless Framework](https://serverless.com)
 - [AWS API Gateway](https://aws.amazon.com/ko/api-gateway/)
 - [AWS Lambda](https://aws.amazon.com/ko/lambda/)
 - [AWS S3](https://aws.amazon.com/ko/s3/)
