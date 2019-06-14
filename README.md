@@ -25,7 +25,7 @@
 - [MySQL](https://www.mysql.com/)
 - [AWS RDS](https://aws.amazon.com/ko/rds/)
 
-### Client
+### Web Client
 - [React.js](https://reactjs.org/)
 - [Next.js](https://nextjs.org/)
 - [Apollo Client](https://github.com/apollographql/apollo-client)
