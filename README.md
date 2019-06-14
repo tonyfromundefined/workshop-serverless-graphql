@@ -25,9 +25,9 @@
 ### Database
 - MySQL
 
-##  필수 준비 사항
-### 0. 본 Github Repository를 Clone 해주세요!
-중간중간 실습 파일들이 업로드 되어있습니다. 세션 시작 전 미리 다운 받아주세요! 
+##  미리 준비해주세요
+### 0. 본 Github Repository를 본인의 컴퓨터에 복사해주세요
+중간중간 실습에 필요한 파일들이 업로드 되어있습니다. 세션 시작 전 미리 다운 받아주세요.
 - `.zip` 파일로 [다운로드](https://github.com/tonyfromundefined/ausg-seminar-2018/archive/master.zip)
 - 또는
   ```bash
@@ -59,6 +59,9 @@
 ### 5. Node.js
 - Node.js 최신 버전 [다운로드](https://nodejs.org/en/)
 
+### 6. AWS CLI
+- AWS CLI 설치하기 [다운로드](https://aws.amazon.com/ko/cli/)
+
 
 # 자 그럼 이제 시작해볼까요?
 1. GraphQL API 프로젝트 코드 살펴보기
@@ -81,3 +84,6 @@
     1. API 배포 삭제하기
     2. Prisma 삭제하기
     3. RDS 삭제하기
+
+# 할 일
+기능 추가를 원하시면, 새 이슈를 생성해주세요. 또한, Pull Request는 언제나 환영입니다.🙏
