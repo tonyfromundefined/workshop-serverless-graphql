@@ -19,7 +19,7 @@
 - [Apollo Server](https://www.apollographql.com/docs/apollo-server/)
 - [Prisma Nexus](https://nexus.js.org/)
 
-### Data Layer with ORM
+### Data Loader + ORM
 - [Prisma](https://www.prisma.io/)
 
 ### Database
