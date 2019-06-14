@@ -76,7 +76,7 @@
 - AWS CLI 설치하기 [다운로드](https://aws.amazon.com/ko/cli/)
 
 
-# 자 그럼 이제 시작해볼까요?
+## 자 그럼 이제 시작해볼까요?
 1. [GraphQL 살펴보기](/documents/1-graphql)
     1. `Type`, `Query`, `Mutation`
     2. Nexus로 시작하는 *Code-First* GraphQL 개발
@@ -97,8 +97,10 @@
     2. Prisma 삭제하기
     3. RDS 삭제하기
 
-# 할 일
-기능 추가를 원하시면, 새 이슈를 생성해주세요. 또한, Pull Request는 언제나 환영입니다.🙏
+## 할 일
+Feature Request를 원하시면, 새 이슈를 생성해주세요. 또한, Pull Request는 언제나 환영입니다.🙏
+
+---
 
 ### 부록
 - [완성된 서버 프로젝트](/projects/server)
