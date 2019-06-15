@@ -1,13 +1,10 @@
-# 패키지 관련
 node_modules
 yarn-error.log
 
-# 빌드 번들
-dist
+generated
 
-# 환경 변수
+dist
+.serverless
+
 .env.development
 .env.production
-
-# Nexus, GraphQL Code Generator 등 자동 생성 코드
-generated

@@ -10,7 +10,11 @@
     "predev": "rimraf ./dist",
     "dev": "webpack --config webpack.config.dev.js --info-verbosity none",
     "prebuild": "rimraf ./dist",
-    "build": "NODE_ENV=production webpack --config webpack.config.prod.js"
+    "build": "webpack --config webpack.config.prod.js",
+    "deploy:dev": "sls deploy --stage dev",
+    "deploy:prod": "NODE_ENV=production sls deploy --stage prod",
+    "undeploy:dev": "sls remove --stage dev",
+    "undeploy:prod": "sls remove --stage prod"
   },
   "dependencies": {
     "apollo-server-express": "^2.6.3",
@@ -22,6 +26,7 @@
     "express": "^4.17.1",
     "graphql": "^14.3.1",
     "nexus": "^0.12.0-beta.6",
+    "short-uuid": "^3.1.1",
     "utf-8-validate": "^5.0.2"
   },
   "devDependencies": {

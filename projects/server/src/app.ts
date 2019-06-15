@@ -7,6 +7,10 @@ import {
   queryType,
 } from 'nexus'
 import path from 'path'
+import { Task, TaskMutations, TaskQueries } from './schema/task'
+
+const isProd = process.env.NODE_ENV === 'production'
+const isStageDevelopment = !isProd || process.env.STAGE === 'development'
 
 const app = express()
 
@@ -26,13 +30,16 @@ const server = new ApolloServer({
       }),
       Mutation: mutationType({
         definition(t) {
-          t.string('stage', {
+          t.string('ping', {
             resolve() {
-              return process.env.STAGE as string
+              return 'pong'
             },
           })
         },
       }),
+      Task,
+      TaskQueries,
+      TaskMutations,
     },
     outputs: {
       schema: path.resolve('./src/generated', 'schema.graphql'),
@@ -45,6 +52,8 @@ const server = new ApolloServer({
       res,
     }
   },
+  introspection: isStageDevelopment,
+  playground: isStageDevelopment,
 })
 
 server.applyMiddleware({ app })
