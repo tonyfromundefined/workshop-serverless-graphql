@@ -8,5 +8,8 @@ generated
 dist
 .serverless
 
+.env
 .env.development
 .env.production
+
+prisma.yml
