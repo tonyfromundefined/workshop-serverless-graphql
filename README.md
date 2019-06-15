@@ -78,7 +78,7 @@
 
 ## 자 그럼 이제 시작해볼까요?
 1. [GraphQL 살펴보기](/documents/1-graphql)
-    1. `Type`, `Query`, `Mutation`
+    1. GraphQL Type 시스템과 `Query`, `Mutation` Type
     2. Nexus로 시작하는 *Code-First* GraphQL 개발
     3. GraphQL Playground
 2. [Serverless로 서버 배포하기](/documents/2-serverless)
