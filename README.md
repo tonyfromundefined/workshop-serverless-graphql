@@ -44,7 +44,7 @@
 ##  미리 준비해주세요
 ### 0. 본 Github Repository를 본인의 컴퓨터에 복사해주세요
 중간중간 실습에 필요한 파일들이 업로드 되어있습니다. 세션 시작 전 미리 다운 받아주세요.
-- `.zip` 파일로 [다운로드](https://github.com/tonyfromundefined/ausg-seminar-2018/archive/master.zip)
+- `.zip` 파일로 [다운로드](https://github.com/tonyfromundefined/serverless-graphql-workshop/archive/master.zip)
 - 또는
   ```bash
   $ git clone https://github.com/tonyfromundefined/serverless-graphql-workshop
