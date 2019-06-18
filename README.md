@@ -81,18 +81,17 @@
     1. GraphQL Type 시스템과 `Query`, `Mutation` Type
     2. Nexus로 시작하는 *Code-First* GraphQL 개발
     3. GraphQL Playground
-2. [Serverless로 서버 배포하기](/documents/2-serverless)
+2. [Serverless로 GraphQL API 배포하기](/documents/2-serverless)
     1. IAM 사용자 생성하기
     2. Serverless Framework을 사용해 Node.js 프로젝트 배포하기
-3. [AWS RDS로 MySQL 설정하기](/documents/3-rds)
-4. [AWS Fargate에 Prisma Server 배포하기](/documents/4-fargate)
-5. [Prisma 사용하기](/documents/5-prisma)
+3. [AWS에 Prisma 배포하기 (CloudFormation)](/documents/3-prisma-on-aws)
+4. [Prisma 사용하기](/documents/4-prisma)
     1. Prisma
     2. Prisma로 데이터 모델 정의하기
     3. Prisma Client 사용해보기
     4. `nexus-prisma`를 사용해, Prisma 연결하기
-6. [React.js에서 GraphQL 사용하기](/documents/6-react-graphql)
-7. [삭제하기](/documents/7-delete)
+5. [React.js에서 GraphQL 사용하기](/documents/5-react-graphql)
+6. [삭제하기](/documents/6-delete)
     1. API 배포 삭제하기
     2. Prisma 삭제하기
     3. RDS 삭제하기
