@@ -13,3 +13,4 @@ dist
 .env.production
 
 prisma.yml
+datamodel.prisma
