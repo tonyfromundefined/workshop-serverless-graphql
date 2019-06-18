@@ -83,6 +83,7 @@ Parameters:
   PrismaManagementApiSecret:
     Description: The secret for your Prisma server.
     Type: String
+    NoEcho: 'true'
 
 
 Mappings:
