@@ -90,7 +90,7 @@
 3. [AWS에 Prisma 배포하기 (CloudFormation)](/documents/3-prisma-on-aws)
 4. [Prisma 사용하기](/documents/4-prisma)
     1. Prisma란?
-    2. Prisma로 데이터 모델 정의하기
+    2. Prisma 시작하기
     3. Prisma Client 사용해보기
     4. `nexus-prisma`를 사용해, Prisma 연결하기
 5. [React.js에서 GraphQL 사용하기](/documents/5-react-graphql)
