@@ -89,15 +89,14 @@
     2. Serverless Framework을 사용해 Node.js 프로젝트 배포하기
 3. [AWS에 Prisma 배포하기 (CloudFormation)](/documents/3-prisma-on-aws)
 4. [Prisma 사용하기](/documents/4-prisma)
-    1. Prisma
+    1. Prisma란?
     2. Prisma로 데이터 모델 정의하기
     3. Prisma Client 사용해보기
     4. `nexus-prisma`를 사용해, Prisma 연결하기
 5. [React.js에서 GraphQL 사용하기](/documents/5-react-graphql)
 6. [삭제하기](/documents/6-delete)
     1. API 배포 삭제하기
-    2. Prisma 삭제하기
-    3. RDS 삭제하기
+    2. CloudFormation Stack 삭제하기
 
 ## 할 일
 Feature Request를 원하시면, 새 이슈를 생성해주세요. 또한, Pull Request는 언제나 환영입니다.🙏
