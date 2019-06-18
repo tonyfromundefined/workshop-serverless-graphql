@@ -404,8 +404,8 @@ Resources:
 
 
 Outputs:
-  ExternalEndpoint:
+  PrismaEndpoint:
     Description: The endpoint of the external load balancer
     Value: !Join ['', ['http://', !GetAtt 'LoadBalancer.DNSName']]
     Export:
-      Name: !Join [ ':', [ !Ref 'AWS::StackName', 'ExternalEndpoint' ] ]
+      Name: !Join [ ':', [ !Ref 'AWS::StackName', 'PrismaEndpoint' ] ]
