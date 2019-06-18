@@ -37,6 +37,9 @@
 - [MobX 5](https://github.com/mobxjs/mobx)
 - [styled-components](https://www.styled-components.com) 👏
 
+### 기타
+- [AWS CloudFormation](https://aws.amazon.com/ko/cloudformation/)
+
 
 ##  미리 준비해주세요
 ### 0. 본 Github Repository를 본인의 컴퓨터에 복사해주세요
