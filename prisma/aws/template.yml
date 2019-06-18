@@ -1,4 +1,3 @@
-# Template adapted from https://github.com/nathanpeck/aws-cloudformation-fargate
 AWSTemplateFormatVersion: '2010-09-09'  
 Description: AWS Fargate Prisma stack.
 Parameters:
@@ -36,26 +35,60 @@ Parameters:
       - 1.8.3
       - 1.7.4
 
-  DbHost:
+  DatabaseName:
+    Default: "prisma"
+    Description: The database name (Default "prisma", change if you are creating more than one database)
     Type: String
 
-  DbPort:
+  DatabaseInstanceType:
+    Default: db.t2.micro
+    AllowedValues:
+      - db.t2.micro
+      - db.t2.small
+      - db.t2.medium
+      - db.t2.large
+      - db.t2.xlarge
+      - db.t2.2xlarge
+      - db.r4.large
+      - db.r4.xlarge
+      - db.r4.2xlarge
+      - db.r4.4xlarge
+      - db.r4.8xlarge
+      - db.r4.16xlarge
+      - db.m4.large
+      - db.m4.2xlarge
+      - db.m4.4xlarge
+      - db.m4.10xlarge
+      - db.m4.16xlarge
+    Description: "The instance type to use for the database. Pricing: https://aws.amazon.com/rds/mysql/pricing/"
+    Type: String
+  
+  DatabaseUsername:
+    Default: "prisma"
+    AllowedPattern: "[a-zA-Z0-9]+"
+    ConstraintDescription: must contain only alphanumeric characters. Must have length 1-16
+    Description: The database admin account user name. (Default "prisma")
+    MaxLength: '16'
+    MinLength: '1'
+    Type: String
+
+  DatabasePassword:
+    AllowedPattern: "[a-zA-Z0-9]+"
+    ConstraintDescription: must contain only alphanumeric characters. Must have length 8-41.
+    Description: The database admin account password. (Choose a secure password)
+    MaxLength: '41'
+    MinLength: '8'
+    NoEcho: 'true'
+    Type: String
+  
+  DatabaseAllocatedStorage:
+    Default: 20
+    Description: Storage to allocate in GB (Default "20")
     Type: Number
-    Default: 3306
+    MinValue: 20
+    MaxValue: 16384
+    ConstraintDescription: Allocated storage size must be in range 20-16384 GB
 
-  DbUser:
-    Type: String
-
-  DbPassword:
-    Type: String
-    NoEcho: true
-
-  DbConnector:
-    Type: String
-    Default: mysql
-
-  # Important: Follow the CPU + memory combination rules laid out here: 
-  # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-taskdefinition.html
   Cpu:
     Type: String
     Description: The CPU units for the container. Must adhere to https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-taskdefinition.html.
@@ -76,17 +109,6 @@ Parameters:
     Type: String
 
 Mappings:
-  # Hard values for the subnet masks. These masks define
-  # the range of internal IP addresses that can be assigned.
-  # The VPC can have all IP's from 10.0.0.0 to 10.0.255.255
-  # There are two subnets which cover the ranges:
-  #
-  # 10.0.0.0 - 10.0.0.255
-  # 10.0.1.0 - 10.0.1.255
-  #
-  # If you need more IP addresses (perhaps you have so many
-  # instances that you run out) then you can customize these
-  # ranges to add more
   SubnetConfig:
     VPC:
       CIDR: '10.0.0.0/16'
@@ -96,10 +118,6 @@ Mappings:
       CIDR: '10.0.1.0/24'
 
 Resources:
-  # VPC in which containers will be networked.
-  # It has two public subnets
-  # We distribute the subnets across the first two available subnets
-  # for the region, for high availability.
   VPC:
     Type: AWS::EC2::VPC
     Properties:
@@ -107,14 +125,13 @@ Resources:
       EnableDnsHostnames: true
       CidrBlock: !FindInMap ['SubnetConfig', 'VPC', 'CIDR']
 
-  # Two public subnets, where containers can have public IP addresses
   PublicSubnetOne:
     Type: AWS::EC2::Subnet
     Properties:
       AvailabilityZone:
-         Fn::Select:
-         - 0
-         - Fn::GetAZs: {Ref: 'AWS::Region'}
+        Fn::Select:
+        - 0
+        - Fn::GetAZs: {Ref: 'AWS::Region'}
       VpcId: !Ref 'VPC'
       CidrBlock: !FindInMap ['SubnetConfig', 'PublicOne', 'CIDR']
       MapPublicIpOnLaunch: true
@@ -123,16 +140,13 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       AvailabilityZone:
-         Fn::Select:
-         - 1
-         - Fn::GetAZs: {Ref: 'AWS::Region'}
+        Fn::Select:
+        - 1
+        - Fn::GetAZs: {Ref: 'AWS::Region'}
       VpcId: !Ref 'VPC'
       CidrBlock: !FindInMap ['SubnetConfig', 'PublicTwo', 'CIDR']
       MapPublicIpOnLaunch: true
 
-  # Setup networking resources for the public subnets. Containers
-  # in the public subnets have public IP addresses and the routing table
-  # sends network traffic via the internet gateway.
   InternetGateway:
     Type: AWS::EC2::InternetGateway
   
@@ -167,33 +181,65 @@ Resources:
       SubnetId: !Ref PublicSubnetTwo
       RouteTableId: !Ref PublicRouteTable
 
-  # ECS Resources
-  ECSCluster:
-    Type: AWS::ECS::Cluster
 
-  FargateContainerSecurityGroup:
+  DatabaseSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: CloudFormation managed DB subnet group.
+      SubnetIds:
+        - !Ref PublicSubnetOne
+        - !Ref PublicSubnetTwo
+
+  DatabaseParameterGroup:
+    Type: "AWS::RDS::DBParameterGroup"
+    Properties: 
+      Description: Prisma DB parameter group 
+      Family: MySQL5.7
+      Parameters:
+        max_connections: 300
+    
+  DatabaseSecurityGroup:
     Type: AWS::EC2::SecurityGroup
-    Properties:
-      GroupDescription: Access to the Fargate containers
-      VpcId: !Ref 'VPC'
-  
-  EcsSecurityGroupIngressFromPublicALB:
-    Type: AWS::EC2::SecurityGroupIngress
-    Properties:
-      Description: Ingress from the public ALB
-      GroupId: !Ref 'FargateContainerSecurityGroup'
-      IpProtocol: -1
-      SourceSecurityGroupId: !Ref 'PublicLoadBalancerSG'
-  
-  EcsSecurityGroupIngressFromSelf:
-    Type: AWS::EC2::SecurityGroupIngress
-    Properties:
-      Description: Ingress from other containers in the same security group
-      GroupId: !Ref 'FargateContainerSecurityGroup'
-      IpProtocol: -1
-      SourceSecurityGroupId: !Ref 'FargateContainerSecurityGroup'
+    Properties: 
+      VpcId: !Ref VPC
+      GroupDescription: Access to database
 
-  PublicLoadBalancerSG:
+  DatabaseSecurityGroupIngressFromPrisma:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Description: Ingress from prisma service
+      GroupId: !Ref 'DatabaseSecurityGroup'
+      IpProtocol: -1
+      SourceSecurityGroupId: !Ref 'PrismaServiceSecurityGroup'
+
+  DatabaseInstance:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      Engine: mysql
+      EngineVersion: 5.7.19
+      DBInstanceClass:
+        Ref: DatabaseInstanceType
+      DBSubnetGroupName:
+        Ref: DatabaseSubnetGroup    
+      DBParameterGroupName: !Ref DatabaseParameterGroup
+      PubliclyAccessible: "true"
+      StorageType: "gp2"
+      AllocatedStorage: !Ref DatabaseAllocatedStorage
+      BackupRetentionPeriod: 35
+      DBInstanceIdentifier: !Ref DatabaseName
+      MasterUsername:
+        Ref: DatabaseUsername
+      MasterUserPassword:
+        Ref: DatabasePassword
+      PreferredBackupWindow: 02:00-03:00
+      PreferredMaintenanceWindow: mon:03:00-mon:04:00
+      DBSubnetGroupName:
+        Ref: DatabaseSubnetGroup
+      VPCSecurityGroups:
+        - Ref: DatabaseSecurityGroup
+
+
+  LoadBalancerSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription: Access to the public facing load balancer
@@ -201,8 +247,8 @@ Resources:
       SecurityGroupIngress:
           - CidrIp: 0.0.0.0/0
             IpProtocol: -1
-  
-  PublicLoadBalancer:
+
+  LoadBalancer:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties:
       Scheme: internet-facing
@@ -212,9 +258,9 @@ Resources:
       Subnets:
         - !Ref PublicSubnetOne
         - !Ref PublicSubnetTwo
-      SecurityGroups: [!Ref 'PublicLoadBalancerSG']
+      SecurityGroups: [!Ref 'LoadBalancerSecurityGroup']
 
-  PrismaTargetGroup:
+  LoadBalancerTargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
       HealthCheckIntervalSeconds: 6
@@ -229,17 +275,21 @@ Resources:
       VpcId: !Ref 'VPC'
       TargetType: 'ip'
 
-  PublicLoadBalancerListener:
+  LoadBalancerListener:
     Type: AWS::ElasticLoadBalancingV2::Listener
     DependsOn:
-      - PublicLoadBalancer
+      - LoadBalancer
     Properties:
       DefaultActions:
-        - TargetGroupArn: !Ref 'PrismaTargetGroup'
+        - TargetGroupArn: !Ref 'LoadBalancerTargetGroup'
           Type: 'forward'
-      LoadBalancerArn: !Ref 'PublicLoadBalancer'
+      LoadBalancerArn: !Ref 'LoadBalancer'
       Port: 80
       Protocol: HTTP
+
+
+  PrismaCluster:
+    Type: AWS::ECS::Cluster
 
   PrismaLogs:
     Type: "AWS::Logs::LogGroup"
@@ -247,8 +297,9 @@ Resources:
       LogGroupName: !Ref 'AWS::StackName'
       RetentionInDays: 7
 
-  TaskDefinition:
+  PrismaTaskDefinition:
     Type: AWS::ECS::TaskDefinition
+    DependsOn: DatabaseInstance
     Properties:
       Cpu: !Ref Cpu
       Memory: !Ref Memory
@@ -256,10 +307,10 @@ Resources:
         - FARGATE
       Family: prisma
       NetworkMode: awsvpc
-      ExecutionRoleArn: !Ref ECSTaskExecutionRole # arn:aws:iam::000:role/EcsTaskExecutionRole
-      TaskRoleArn: !Ref ECSTaskExecutionRole #arn:aws:iam::000:role/EcsTaskExecutionRole
+      ExecutionRoleArn: !Ref PrismaTaskExecutionRole
+      TaskRoleArn: !Ref PrismaTaskExecutionRole
       ContainerDefinitions:
-        - Name: prisma-container
+        - Name: PrismaContainer
           Essential: true
           Image: !Join [ ':', [ 'prismagraphql/prisma', !Ref PrismaVersion ] ]
           PortMappings:
@@ -272,16 +323,15 @@ Resources:
                   managementApiSecret: ${ManagementApiSecret}
                   databases:
                     default:
-                      connector: ${DbConnector}
-                      host: ${DbHost}
-                      port: ${DbPort}
-                      user: ${DbUser}
-                      password: ${DbPassword}
+                      connector: 'mysql'
+                      host: ${DatabaseInstance.Endpoint.Address}
+                      port: ${DatabaseInstance.Endpoint.Port}
+                      user: ${DatabaseUsername}
+                      password: ${DatabasePassword}
                       migrations: true
                 - {}
             - Name: JAVA_OPTS
               Value: !Ref JvmOpts
-
           Ulimits:
             - Name: nofile
               HardLimit: 1000000
@@ -293,36 +343,54 @@ Resources:
               awslogs-region: !Ref AWS::Region
               awslogs-stream-prefix: prisma
 
+  PrismaServiceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Access to the Fargate containers
+      VpcId: !Ref 'VPC'
+  
+  PrismaServiceSecurityGroupIngressFromLoadBalancer:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Description: Ingress from the load balancer
+      GroupId: !Ref 'PrismaServiceSecurityGroup'
+      IpProtocol: -1
+      SourceSecurityGroupId: !Ref 'LoadBalancerSecurityGroup'
+  
+  PrismaServiceSecurityGroupIngressFromSelf:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Description: Ingress from other containers in the same security group
+      GroupId: !Ref 'PrismaServiceSecurityGroup'
+      IpProtocol: -1
+      SourceSecurityGroupId: !Ref 'PrismaServiceSecurityGroup'
+
   PrismaService:
     Type: AWS::ECS::Service
-    DependsOn: PublicLoadBalancerListener
+    DependsOn: LoadBalancerListener
     Properties: 
-      Cluster: !Ref ECSCluster
+      Cluster: !Ref PrismaCluster
       ServiceName: Prisma
       LaunchType: FARGATE
       DesiredCount: 1
       DeploymentConfiguration: 
         MaximumPercent: 200
         MinimumHealthyPercent: 50
-      TaskDefinition: !Ref TaskDefinition
+      TaskDefinition: !Ref PrismaTaskDefinition
       LoadBalancers: 
-        - ContainerName: prisma-container
+        - ContainerName: PrismaContainer
           ContainerPort: 60000
-          TargetGroupArn: !Ref PrismaTargetGroup
+          TargetGroupArn: !Ref LoadBalancerTargetGroup
       NetworkConfiguration: 
         AwsvpcConfiguration:
           AssignPublicIp: ENABLED
           SecurityGroups: 
-            - !Ref PublicLoadBalancerSG
+            - !Ref PrismaServiceSecurityGroup
           Subnets:
             - !Ref PublicSubnetOne
             - !Ref PublicSubnetTwo
 
-  # This is an IAM role which authorizes ECS to manage resources on your
-  # account on your behalf, such as updating your load balancer with the
-  # details of where your containers are, so that traffic can reach your
-  # containers.
-  ECSRole:
+  PrismaRole:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
@@ -338,8 +406,6 @@ Resources:
           Statement:
           - Effect: Allow
             Action:
-              # Rules which allow ECS to attach network interfaces to instances
-              # on your behalf in order for awsvpc networking mode to work right
               - 'ec2:AttachNetworkInterface'
               - 'ec2:CreateNetworkInterface'
               - 'ec2:CreateNetworkInterfacePermission'
@@ -347,9 +413,6 @@ Resources:
               - 'ec2:DeleteNetworkInterfacePermission'
               - 'ec2:Describe*'
               - 'ec2:DetachNetworkInterface'
-
-              # Rules which allow ECS to update load balancers on your behalf
-              # with the information sabout how to send traffic to your containers
               - 'elasticloadbalancing:DeregisterInstancesFromLoadBalancer'
               - 'elasticloadbalancing:DeregisterTargets'
               - 'elasticloadbalancing:Describe*'
@@ -357,8 +420,7 @@ Resources:
               - 'elasticloadbalancing:RegisterTargets'
             Resource: '*'
 
-  # This is a role which is used by the ECS tasks themselves.
-  ECSTaskExecutionRole:
+  PrismaTaskExecutionRole:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
@@ -374,71 +436,18 @@ Resources:
             Statement:
             - Effect: Allow
               Action:
-                # Allow the ECS Tasks to download images from ECR
                 - 'ecr:GetAuthorizationToken'
                 - 'ecr:BatchCheckLayerAvailability'
                 - 'ecr:GetDownloadUrlForLayer'
                 - 'ecr:BatchGetImage'
-
-                # Allow the ECS tasks to upload logs to CloudWatch
                 - 'logs:CreateLogStream'
                 - 'logs:PutLogEvents'
               Resource: '*'
 
-# These are the values output by the CloudFormation template. Be careful
-# about changing any of them, because of them are exported with specific
-# names so that the other task related CF templates can use them.
+
 Outputs:
-  ClusterName:
-    Description: The name of the ECS cluster
-    Value: !Ref 'ECSCluster'
-    Export:
-      Name: !Join [ ':', [ !Ref 'AWS::StackName', 'ClusterName' ] ]
-  
-  ExternalUrl:
+  ExternalEndpoint:
     Description: The url of the external load balancer
-    Value: !Join ['', ['http://', !GetAtt 'PublicLoadBalancer.DNSName']]
+    Value: !Join ['', ['http://', !GetAtt 'LoadBalancer.DNSName']]
     Export:
-      Name: !Join [ ':', [ !Ref 'AWS::StackName', 'ExternalUrl' ] ]
-  
-  ECSRole:
-    Description: The ARN of the ECS role
-    Value: !GetAtt 'ECSRole.Arn'
-    Export:
-      Name: !Join [ ':', [ !Ref 'AWS::StackName', 'ECSRole' ] ]
-  
-  ECSTaskExecutionRole:
-    Description: The ARN of the ECS role
-    Value: !GetAtt 'ECSTaskExecutionRole.Arn'
-    Export:
-      Name: !Join [ ':', [ !Ref 'AWS::StackName', 'ECSTaskExecutionRole' ] ]
-  
-  PublicListener:
-    Description: The ARN of the public load balancer's Listener
-    Value: !Ref PublicLoadBalancerListener
-    Export:
-      Name: !Join [ ':', [ !Ref 'AWS::StackName', 'PublicListener' ] ]
-  
-  VPCId:
-    Description: The ID of the VPC that this stack is deployed in
-    Value: !Ref 'VPC'
-    Export:
-      Name: !Join [ ':', [ !Ref 'AWS::StackName', 'VPCId' ] ]
-  
-  PublicSubnetOne:
-    Description: Public subnet one
-    Value: !Ref 'PublicSubnetOne'
-    Export:
-      Name: !Join [ ':', [ !Ref 'AWS::StackName', 'PublicSubnetOne' ] ]
-  
-  PublicSubnetTwo:
-    Description: Public subnet two
-    Value: !Ref 'PublicSubnetTwo'
-    Export:
-      Name: !Join [ ':', [ !Ref 'AWS::StackName', 'PublicSubnetTwo' ] ]
-  
-  FargateContainerSecurityGroup:
-    Description: A security group used to allow Fargate containers to receive traffic
-    Value: !Ref 'FargateContainerSecurityGroup'
-    Export:
-      Name: !Join [ ':', [ !Ref 'AWS::StackName', 'FargateContainerSecurityGroup' ] ]
+      Name: !Join [ ':', [ !Ref 'AWS::StackName', 'ExternalEndpoint' ] ]

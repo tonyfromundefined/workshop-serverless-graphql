@@ -1,5 +1,0 @@
-type Todo {
-  id: ID! @id
-  content: String!
-  isDone: Boolean!
-}
