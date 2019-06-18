@@ -7,40 +7,6 @@
 AWSTemplateFormatVersion: '2010-09-09'  
 Description: AWS Fargate Prisma stack.
 Parameters:
-  PrismaVersion:
-    Type: String
-    Default: 1.34.0
-    AllowedValues:
-      - 1.34.0
-      - 1.33.0
-      - 1.32.0
-      - 1.31.0
-      - 1.30.0
-      - 1.29.0
-      - 1.28.0
-      - 1.27.0
-      - 1.26.0
-      - 1.25.0
-      - 1.24.0
-      - 1.23.0
-      - 1.22.0
-      - 1.21.0
-      - 1.20.0
-      - 1.19.0
-      - 1.18.0
-      - 1.17.0
-      - 1.16.0
-      - 1.15.0
-      - 1.14.0
-      - 1.13.0
-      - 1.12.0
-      - 1.11.0
-      - 1.10.2
-      - 1.9.0
-      - 1.8.4
-      - 1.8.3
-      - 1.7.4
-
   DatabaseName:
     Default: "prisma"
     Description: The database name (Default "prisma", change if you are creating more than one database)
@@ -95,22 +61,56 @@ Parameters:
     MaxValue: 16384
     ConstraintDescription: Allocated storage size must be in range 20-16384 GB
 
-  Cpu:
+  PrismaCpu:
     Type: String
     Description: The CPU units for the container. Must adhere to https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-taskdefinition.html.
     Default: 256
 
-  Memory:
+  PrismaMemory:
     Description: The memory reservation for the container. Must adhere to https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-taskdefinition.html.
     Type: Number
     Default: 512
 
-  JvmOpts:
+  PrismaVersion:
+    Type: String
+    Default: 1.34.0
+    AllowedValues:
+      - 1.34.0
+      - 1.33.0
+      - 1.32.0
+      - 1.31.0
+      - 1.30.0
+      - 1.29.0
+      - 1.28.0
+      - 1.27.0
+      - 1.26.0
+      - 1.25.0
+      - 1.24.0
+      - 1.23.0
+      - 1.22.0
+      - 1.21.0
+      - 1.20.0
+      - 1.19.0
+      - 1.18.0
+      - 1.17.0
+      - 1.16.0
+      - 1.15.0
+      - 1.14.0
+      - 1.13.0
+      - 1.12.0
+      - 1.11.0
+      - 1.10.2
+      - 1.9.0
+      - 1.8.4
+      - 1.8.3
+      - 1.7.4
+
+  PrismaJvmOpts:
     Description: The JVM options passed to prisma. For example, change this value when changing the memory parameter. Max heap memory (Xmx) should be roughly two thirds of the total memory.
     Type: String
     Default: '-Xmx1350m'
 
-  ManagementApiSecret:
+  PrismaManagementApiSecret:
     Description: The secret for your Prisma server.
     Type: String
 
@@ -307,8 +307,8 @@ Resources:
     Type: AWS::ECS::TaskDefinition
     DependsOn: DatabaseInstance
     Properties:
-      Cpu: !Ref Cpu
-      Memory: !Ref Memory
+      Cpu: !Ref PrismaCpu
+      Memory: !Ref PrismaMemory
       RequiresCompatibilities: 
         - FARGATE
       Family: prisma
@@ -326,7 +326,7 @@ Resources:
               Value: !Sub 
                 - |
                   port: 60000
-                  managementApiSecret: ${ManagementApiSecret}
+                  managementApiSecret: ${PrismaManagementApiSecret}
                   databases:
                     default:
                       connector: 'mysql'
@@ -337,7 +337,7 @@ Resources:
                       migrations: true
                 - {}
             - Name: JAVA_OPTS
-              Value: !Ref JvmOpts
+              Value: !Ref PrismaJvmOpts
           Ulimits:
             - Name: nofile
               HardLimit: 1000000
