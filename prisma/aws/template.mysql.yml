@@ -8,6 +8,11 @@ AWSTemplateFormatVersion: '2010-09-09'
 Description: Prisma deployment on AWS Fargate, RDS
 
 Parameters:
+  DatabaseName:
+    Default: "prisma"
+    Description: The database name (Default "prisma", change if you are creating more than one database)
+    Type: String
+
   DatabaseInstanceType:
     Default: db.t2.micro
     AllowedValues:
@@ -230,6 +235,7 @@ Resources:
       StorageType: "gp2"
       AllocatedStorage: !Ref DatabaseAllocatedStorage
       BackupRetentionPeriod: 35
+      DBInstanceIdentifier: !Ref DatabaseName
       MasterUsername:
         Ref: DatabaseUsername
       MasterUserPassword:

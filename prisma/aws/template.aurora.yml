@@ -8,6 +8,11 @@ AWSTemplateFormatVersion: '2010-09-09'
 Description: Prisma deployment on AWS Fargate, Aurora Serverless
 
 Parameters:
+  DatabaseName:
+    Default: "prisma"
+    Description: The database name (Default "prisma", change if you are creating more than one database)
+    Type: String
+
   DatabaseUsername:
     Default: "prisma"
     AllowedPattern: "[a-zA-Z0-9]+"
@@ -191,6 +196,7 @@ Resources:
         MaxCapacity: 4
         MinCapacity: 1
         SecondsUntilAutoPause: 300
+      DBClusterIdentifier: !Ref DatabaseName
       DBSubnetGroupName:
         Ref: DatabaseSubnetGroup
       VpcSecurityGroupIds:
