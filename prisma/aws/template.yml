@@ -447,7 +447,7 @@ Resources:
 
 Outputs:
   ExternalEndpoint:
-    Description: The url of the external load balancer
+    Description: The endpoint of the external load balancer
     Value: !Join ['', ['http://', !GetAtt 'LoadBalancer.DNSName']]
     Export:
       Name: !Join [ ':', [ !Ref 'AWS::StackName', 'ExternalEndpoint' ] ]
