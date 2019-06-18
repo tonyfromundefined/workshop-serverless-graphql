@@ -5,13 +5,9 @@
 # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/Welcome.html
 
 AWSTemplateFormatVersion: '2010-09-09'  
-Description: AWS Fargate Prisma stack.
-Parameters:
-  DatabaseName:
-    Default: "prisma"
-    Description: The database name (Default "prisma", change if you are creating more than one database)
-    Type: String
+Description: Prisma deployment on AWS Fargate, RDS
 
+Parameters:
   DatabaseInstanceType:
     Default: db.t2.micro
     AllowedValues:
@@ -34,7 +30,7 @@ Parameters:
       - db.m4.16xlarge
     Description: "The instance type to use for the database. Pricing: https://aws.amazon.com/rds/mysql/pricing/"
     Type: String
-  
+
   DatabaseUsername:
     Default: "prisma"
     AllowedPattern: "[a-zA-Z0-9]+"
@@ -52,7 +48,7 @@ Parameters:
     MinLength: '8'
     NoEcho: 'true'
     Type: String
-  
+
   DatabaseAllocatedStorage:
     Default: 20
     Description: Storage to allocate in GB (Default "20")
@@ -114,6 +110,7 @@ Parameters:
     Description: The secret for your Prisma server.
     Type: String
 
+
 Mappings:
   SubnetConfig:
     VPC:
@@ -122,6 +119,7 @@ Mappings:
       CIDR: '10.0.0.0/24'
     PublicTwo:
       CIDR: '10.0.1.0/24'
+
 
 Resources:
   VPC:
@@ -147,7 +145,7 @@ Resources:
     Properties:
       AvailabilityZone:
         Fn::Select:
-        - 1
+        - 2
         - Fn::GetAZs: {Ref: 'AWS::Region'}
       VpcId: !Ref 'VPC'
       CidrBlock: !FindInMap ['SubnetConfig', 'PublicTwo', 'CIDR']
@@ -232,7 +230,6 @@ Resources:
       StorageType: "gp2"
       AllocatedStorage: !Ref DatabaseAllocatedStorage
       BackupRetentionPeriod: 35
-      DBInstanceIdentifier: !Ref DatabaseName
       MasterUsername:
         Ref: DatabaseUsername
       MasterUserPassword:
@@ -354,7 +351,7 @@ Resources:
     Properties:
       GroupDescription: Access to the Fargate containers
       VpcId: !Ref 'VPC'
-  
+
   PrismaServiceSecurityGroupIngressFromLoadBalancer:
     Type: AWS::EC2::SecurityGroupIngress
     Properties:

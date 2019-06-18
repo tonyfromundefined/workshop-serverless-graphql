@@ -1,0 +1,411 @@
+# References
+# https://www.prisma.io/tutorials/deploy-prisma-to-aws-fargate-ct14
+# https://github.com/prisma/database-templates/blob/master/aws/mysql.yml
+# https://github.com/prisma/prisma-templates/blob/master/aws/fargate.yml
+# https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/Welcome.html
+
+AWSTemplateFormatVersion: '2010-09-09'  
+Description: Prisma deployment on AWS Fargate, Aurora Serverless
+
+Parameters:
+  DatabaseUsername:
+    Default: "prisma"
+    AllowedPattern: "[a-zA-Z0-9]+"
+    ConstraintDescription: must contain only alphanumeric characters. Must have length 1-16
+    Description: The database admin account user name. (Default "prisma")
+    MaxLength: '16'
+    MinLength: '1'
+    Type: String
+
+  DatabasePassword:
+    AllowedPattern: "[a-zA-Z0-9]+"
+    ConstraintDescription: must contain only alphanumeric characters. Must have length 8-41.
+    Description: The database admin account password. (Choose a secure password)
+    MaxLength: '41'
+    MinLength: '8'
+    NoEcho: 'true'
+    Type: String
+
+  PrismaCpu:
+    Type: String
+    Description: The CPU units for the container. Must adhere to https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-taskdefinition.html.
+    Default: 256
+
+  PrismaMemory:
+    Description: The memory reservation for the container. Must adhere to https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-taskdefinition.html.
+    Type: Number
+    Default: 512
+
+  PrismaVersion:
+    Type: String
+    Default: 1.34.0
+    AllowedValues:
+      - 1.34.0
+      - 1.33.0
+      - 1.32.0
+      - 1.31.0
+      - 1.30.0
+      - 1.29.0
+      - 1.28.0
+      - 1.27.0
+      - 1.26.0
+      - 1.25.0
+      - 1.24.0
+      - 1.23.0
+      - 1.22.0
+      - 1.21.0
+      - 1.20.0
+      - 1.19.0
+      - 1.18.0
+      - 1.17.0
+      - 1.16.0
+      - 1.15.0
+      - 1.14.0
+      - 1.13.0
+      - 1.12.0
+      - 1.11.0
+      - 1.10.2
+      - 1.9.0
+      - 1.8.4
+      - 1.8.3
+      - 1.7.4
+
+  PrismaJvmOpts:
+    Description: The JVM options passed to prisma. For example, change this value when changing the memory parameter. Max heap memory (Xmx) should be roughly two thirds of the total memory.
+    Type: String
+    Default: '-Xmx1350m'
+
+  PrismaManagementApiSecret:
+    Description: The secret for your Prisma server.
+    Type: String
+
+
+Mappings:
+  SubnetConfig:
+    VPC:
+      CIDR: '10.0.0.0/16'
+    PublicOne:
+      CIDR: '10.0.0.0/24'
+    PublicTwo:
+      CIDR: '10.0.1.0/24'
+
+
+Resources:
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      CidrBlock: !FindInMap ['SubnetConfig', 'VPC', 'CIDR']
+
+  PublicSubnetOne:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone:
+        Fn::Select:
+        - 0
+        - Fn::GetAZs: {Ref: 'AWS::Region'}
+      VpcId: !Ref 'VPC'
+      CidrBlock: !FindInMap ['SubnetConfig', 'PublicOne', 'CIDR']
+      MapPublicIpOnLaunch: true
+
+  PublicSubnetTwo:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone:
+        Fn::Select:
+        - 2
+        - Fn::GetAZs: {Ref: 'AWS::Region'}
+      VpcId: !Ref 'VPC'
+      CidrBlock: !FindInMap ['SubnetConfig', 'PublicTwo', 'CIDR']
+      MapPublicIpOnLaunch: true
+
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+
+  GatewayAttachement:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref 'VPC'
+      InternetGatewayId: !Ref 'InternetGateway'
+
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref 'VPC'
+
+  PublicRoute:
+    Type: AWS::EC2::Route
+    DependsOn: GatewayAttachement
+    Properties:
+      RouteTableId: !Ref 'PublicRouteTable'
+      DestinationCidrBlock: '0.0.0.0/0'
+      GatewayId: !Ref 'InternetGateway'
+
+  PublicSubnetOneRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PublicSubnetOne
+      RouteTableId: !Ref PublicRouteTable
+
+  PublicSubnetTwoRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PublicSubnetTwo
+      RouteTableId: !Ref PublicRouteTable
+
+
+  DatabaseSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: CloudFormation managed DB subnet group.
+      SubnetIds:
+        - !Ref PublicSubnetOne
+        - !Ref PublicSubnetTwo
+
+  DatabaseSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties: 
+      VpcId: !Ref VPC
+      GroupDescription: Access to database
+
+  DatabaseSecurityGroupIngressFromPrisma:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Description: Ingress from prisma service
+      GroupId: !Ref 'DatabaseSecurityGroup'
+      IpProtocol: -1
+      SourceSecurityGroupId: !Ref 'PrismaServiceSecurityGroup'
+
+  DatabaseCluster:
+    Type: AWS::RDS::DBCluster
+    Properties:
+      MasterUsername: 
+        Ref: DatabaseUsername
+      MasterUserPassword: 
+        Ref: DatabasePassword
+      Engine: aurora
+      EngineMode: serverless
+      ScalingConfiguration:
+        AutoPause: true
+        MaxCapacity: 4
+        MinCapacity: 1
+        SecondsUntilAutoPause: 300
+      DBSubnetGroupName:
+        Ref: DatabaseSubnetGroup
+      VpcSecurityGroupIds:
+        - Ref: DatabaseSecurityGroup
+
+
+  LoadBalancerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Access to the public facing load balancer
+      VpcId: !Ref 'VPC'
+      SecurityGroupIngress:
+          - CidrIp: 0.0.0.0/0
+            IpProtocol: -1
+
+  LoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Scheme: internet-facing
+      LoadBalancerAttributes:
+      - Key: idle_timeout.timeout_seconds
+        Value: '30'
+      Subnets:
+        - !Ref PublicSubnetOne
+        - !Ref PublicSubnetTwo
+      SecurityGroups: [!Ref 'LoadBalancerSecurityGroup']
+
+  LoadBalancerTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      HealthCheckIntervalSeconds: 6
+      HealthCheckPath: /status
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 2
+      Name: !Join ['-', [!Ref 'AWS::StackName', 'prisma']]
+      Port: 80
+      Protocol: HTTP
+      UnhealthyThresholdCount: 2
+      VpcId: !Ref 'VPC'
+      TargetType: 'ip'
+
+  LoadBalancerListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    DependsOn:
+      - LoadBalancer
+    Properties:
+      DefaultActions:
+        - TargetGroupArn: !Ref 'LoadBalancerTargetGroup'
+          Type: 'forward'
+      LoadBalancerArn: !Ref 'LoadBalancer'
+      Port: 80
+      Protocol: HTTP
+
+
+  PrismaCluster:
+    Type: AWS::ECS::Cluster
+
+  PrismaLogs:
+    Type: "AWS::Logs::LogGroup"
+    Properties: 
+      LogGroupName: !Ref 'AWS::StackName'
+      RetentionInDays: 7
+
+  PrismaTaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    DependsOn: DatabaseCluster
+    Properties:
+      Cpu: !Ref PrismaCpu
+      Memory: !Ref PrismaMemory
+      RequiresCompatibilities: 
+        - FARGATE
+      Family: prisma
+      NetworkMode: awsvpc
+      ExecutionRoleArn: !Ref PrismaTaskExecutionRole
+      TaskRoleArn: !Ref PrismaTaskExecutionRole
+      ContainerDefinitions:
+        - Name: PrismaContainer
+          Essential: true
+          Image: !Join [ ':', [ 'prismagraphql/prisma', !Ref PrismaVersion ] ]
+          PortMappings:
+            - ContainerPort: 60000
+          Environment:
+            - Name: PRISMA_CONFIG
+              Value: !Sub 
+                - |
+                  port: 60000
+                  managementApiSecret: ${PrismaManagementApiSecret}
+                  databases:
+                    default:
+                      connector: 'mysql'
+                      host: ${DatabaseCluster.Endpoint.Address}
+                      port: ${DatabaseCluster.Endpoint.Port}
+                      user: ${DatabaseUsername}
+                      password: ${DatabasePassword}
+                      migrations: true
+                - {}
+            - Name: JAVA_OPTS
+              Value: !Ref PrismaJvmOpts
+          Ulimits:
+            - Name: nofile
+              HardLimit: 1000000
+              SoftLimit: 1000000
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: !Ref 'AWS::StackName'
+              awslogs-region: !Ref AWS::Region
+              awslogs-stream-prefix: prisma
+
+  PrismaServiceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Access to the Fargate containers
+      VpcId: !Ref 'VPC'
+
+  PrismaServiceSecurityGroupIngressFromLoadBalancer:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Description: Ingress from the load balancer
+      GroupId: !Ref 'PrismaServiceSecurityGroup'
+      IpProtocol: -1
+      SourceSecurityGroupId: !Ref 'LoadBalancerSecurityGroup'
+
+  PrismaServiceSecurityGroupIngressFromSelf:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Description: Ingress from other containers in the same security group
+      GroupId: !Ref 'PrismaServiceSecurityGroup'
+      IpProtocol: -1
+      SourceSecurityGroupId: !Ref 'PrismaServiceSecurityGroup'
+
+  PrismaService:
+    Type: AWS::ECS::Service
+    DependsOn: LoadBalancerListener
+    Properties: 
+      Cluster: !Ref PrismaCluster
+      ServiceName: Prisma
+      LaunchType: FARGATE
+      DesiredCount: 1
+      DeploymentConfiguration: 
+        MaximumPercent: 200
+        MinimumHealthyPercent: 100
+      TaskDefinition: !Ref PrismaTaskDefinition
+      LoadBalancers: 
+        - ContainerName: PrismaContainer
+          ContainerPort: 60000
+          TargetGroupArn: !Ref LoadBalancerTargetGroup
+      NetworkConfiguration: 
+        AwsvpcConfiguration:
+          AssignPublicIp: ENABLED
+          SecurityGroups: 
+            - !Ref PrismaServiceSecurityGroup
+          Subnets:
+            - !Ref PublicSubnetOne
+            - !Ref PublicSubnetTwo
+
+  PrismaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service: [ecs.amazonaws.com]
+          Action: ['sts:AssumeRole']
+      Path: /
+      Policies:
+      - PolicyName: ecs-service
+        PolicyDocument:
+          Statement:
+          - Effect: Allow
+            Action:
+              - 'ec2:AttachNetworkInterface'
+              - 'ec2:CreateNetworkInterface'
+              - 'ec2:CreateNetworkInterfacePermission'
+              - 'ec2:DeleteNetworkInterface'
+              - 'ec2:DeleteNetworkInterfacePermission'
+              - 'ec2:Describe*'
+              - 'ec2:DetachNetworkInterface'
+              - 'elasticloadbalancing:DeregisterInstancesFromLoadBalancer'
+              - 'elasticloadbalancing:DeregisterTargets'
+              - 'elasticloadbalancing:Describe*'
+              - 'elasticloadbalancing:RegisterInstancesWithLoadBalancer'
+              - 'elasticloadbalancing:RegisterTargets'
+            Resource: '*'
+
+  PrismaTaskExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service: [ecs-tasks.amazonaws.com]
+          Action: ['sts:AssumeRole']
+      Path: /
+      Policies:
+        - PolicyName: AmazonECSTaskExecutionRolePolicy
+          PolicyDocument:
+            Statement:
+            - Effect: Allow
+              Action:
+                - 'ecr:GetAuthorizationToken'
+                - 'ecr:BatchCheckLayerAvailability'
+                - 'ecr:GetDownloadUrlForLayer'
+                - 'ecr:BatchGetImage'
+                - 'logs:CreateLogStream'
+                - 'logs:PutLogEvents'
+              Resource: '*'
+
+
+Outputs:
+  ExternalEndpoint:
+    Description: The endpoint of the external load balancer
+    Value: !Join ['', ['http://', !GetAtt 'LoadBalancer.DNSName']]
+    Export:
+      Name: !Join [ ':', [ !Ref 'AWS::StackName', 'ExternalEndpoint' ] ]
