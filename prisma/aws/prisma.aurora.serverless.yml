@@ -5,7 +5,7 @@
 # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/Welcome.html
 
 AWSTemplateFormatVersion: '2010-09-09'  
-Description: Prisma deployment on AWS Fargate, Aurora Serverless
+Description: Prisma deployment on AWS Fargate, RDS (Aurora Serverless)
 
 Parameters:
   DatabaseName:
