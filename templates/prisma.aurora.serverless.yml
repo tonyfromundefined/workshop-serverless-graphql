@@ -277,7 +277,7 @@ Resources:
       ContainerDefinitions:
         - Name: PrismaContainer
           Essential: true
-          Image: !Join [ ':', [ 'prismagraphql/prisma', !Ref PrismaVersion ] ]
+          Image: !Join [':', [ 'prismagraphql/prisma', !Ref PrismaVersion ]]
           PortMappings:
             - ContainerPort: 60000
           Environment:
@@ -416,4 +416,4 @@ Outputs:
     Description: The endpoint of the external load balancer
     Value: !Join ['', ['http://', !GetAtt 'LoadBalancer.DNSName']]
     Export:
-      Name: !Join [ ':', [ !Ref 'AWS::StackName', 'PrismaEndpoint' ] ]
+      Name: !Join [':', [ !Ref 'AWS::StackName', 'PrismaEndpoint' ]]
