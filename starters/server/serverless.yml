@@ -13,7 +13,7 @@ provider:
   runtime: nodejs8.10
   stage: ${opt:stage, 'dev'}
   region: ap-northeast-2
-  profile: SERVERLESS_GRAPHQL_WORKSHOP
+  profile: SERVERLESS_WORKSHOP
 
 custom:
   #######################################
