@@ -351,7 +351,7 @@ GraphQL에 대해 이해하셨나요? 앞서 말씀드린 Code-First 개발 방�
     },
   })
 
-  /* `/src/generated/schema.graphql`
+  /* `/src/generated/schema.graphql`에 자동 생성 됨
 
   type Query {
     stage: String!
@@ -374,7 +374,7 @@ GraphQL에 대해 이해하셨나요? 앞서 말씀드린 Code-First 개발 방�
     },
   })
 
-  /* `/src/generated/schema.graphql`
+  /* `/src/generated/schema.graphql`에 자동 생성 됨
 
   type Mutation {
     ping: String!
@@ -388,6 +388,21 @@ GraphQL에 대해 이해하셨나요? 앞서 말씀드린 Code-First 개발 방�
   추가적으로 Nexus가 `/src/generated/typegen.ts`에 TypeScript 타이핑을 자동으로 생성해주기 때문에, GraphQL 타입 환경을 TypeScript 환경과 결합하여 초월적인 개발 편의성을 만끽 할 수 있습니다. (**IDE 지원 부족으로 인한 낮은 개발 경험** 문제 해결)
 
 ## (4) GraphQL Playground
+API를 작성했다면, 해당 API가 정상적으로 동작하는지 테스트해보아야겠죠? 개발 서버를 띄워놓은 상태에서 `http://localhost:3000/graphql`로 접속하면, GraphQL 문서화 도구인, **GraphQL Playground**를 볼 수 있습니다.
+
+해당 도구를 통해 GraphQL API를 검색하고, 구현된 API를 테스트 할 수 있습니다. GraphQL Playground를 통해 아래 쿼리를 테스트해봅시다
+
+```graphql
+query {
+  stage
+}
+```
+
+```graphql
+mutation {
+  ping
+}
+```
 
 ## (5) `Task` 타입과 쿼리, 뮤테이션 만들기
 
