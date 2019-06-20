@@ -204,13 +204,16 @@ query {
 ```
 
 이 요청에 응답하기 위해 서버에서
-1. `Query.user` 리졸버가 실행됩니다.
-2. 데이터베이스에서 User를 가져와서 해당 값을 리졸버 함수 내에서 `return` 합니다
-3. `return` 값을 `User.id`, `User.username` 리졸버에 `parent` argument로 넘겨줍니다
-    1. `User.id` 리졸버는 `parent`값을 사용해, id 값을 `return` 합니다.
-    2. `User.username` 리졸버는 `parent`값을 사용해, username 값을 `return` 합니다.
 
-순으로 리졸버가 실행됩니다. 그 후 결과를 종합해 다음과 같이 JSON으로 응답하여 줍니다.
+![](./images/diagram-1.png)
+
+1. `Query.user` 리졸버 함수 실행
+2. 데이터베이스에서 User를 가져와서 해당 값을 리졸버 함수 내에서 `return`
+3. `return` 값을 `User.id`, `User.username` 리졸버에 `parent` argument로 전달
+    1. `User.id` 리졸버 함수는 `parent` argument를 사용해, id 값을 `return`
+    2. `User.username` 리졸버 함수는 `parent` argument를 사용해, username 값을 `return`
+
+순으로 리졸버 함수가 실행됩니다. 그 후 결과를 종합해 다음과 같이 JSON으로 응답하여 줍니다.
 ```json
 {
   "user": {
