@@ -91,7 +91,7 @@ CloudFormation 역시 Serverless Framework과 같은 IaC의 일종입니다. Clo
     2. Prisma 시작하기
     3. Prisma Client 사용해보기
     4. `nexus-prisma`를 사용해, Prisma 연결하기
-5. React.js에서 GraphQL 사용하기
+5. React.js에서 GraphQL API 사용하기
 6. 삭제하기
     1. API 배포 삭제하기
     2. CloudFormation Stack 삭제하기
