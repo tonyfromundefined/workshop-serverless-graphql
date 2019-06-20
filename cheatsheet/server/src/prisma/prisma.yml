@@ -1,0 +1,6 @@
+endpoint: http://Prism-LoadB-1Q7TOM5DMWSXF-1830287070.ap-northeast-2.elb.amazonaws.com/workshop/dev
+datamodel: datamodel.prisma
+
+generate:
+  - generator: typescript-client
+    output: ./generated/prisma-client/
