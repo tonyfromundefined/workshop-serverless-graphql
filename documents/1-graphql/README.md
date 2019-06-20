@@ -271,11 +271,25 @@ GraphQL에 대해 이해하셨나요? 앞서 말씀드린 Code-First 개발 방�
 - `app.ts`
   - Express.js 프레임워크를 통해 API가 구현되는 엔트리 파일입니다. 만들어진 API 서버를 export 합니다.
 - `server.ts`
-  - `app.ts`에서 API 서버를 가져와 특정 (3000 또는 80) 포트로 Listen합니다.
-  - 개발 및 EC2, ECS 등 기존 컴퓨팅 환경에 배포 할 때 사용합니다.
+  - `app.ts`에서 API 서버를 가져와 3000 포트로 Listen합니다.
+  - 개발 서버를 띄우는 데 사용합니다.
 - `serverless.ts`
   - `app.ts`에서 API 서버를 가져와 `aws-serverless-express`를 사용하여, Lambda 요청에 응답하는 함수를 초기화합니다.
   - API Gateway와 Lambda 기반의 서버리스 환경에 배포 할 때 사용합니다.
+
+#### `/src/schema/`
+- `index.ts`
+  - 엔트리 파일입니다. `Query.ts`와 `Mutation.ts`가 내보낸 항목을 다시 내보내는 역할을 합니다.
+- `Query.ts`
+  - 기본 Query 타입을 선언합니다.
+- `Mutation.ts`
+  - 기본 Mutation 타입을 선언합니다.
+
+#### `/src/generated`
+- `schema.graphql`
+  - Nexus가 자동 생성한 Schema 입니다.
+- `typegen.ts`
+  - Nexus가 자동 생성한 TypeScript Typing 입니다.
 
 
 ### 시작하기
@@ -302,12 +316,14 @@ GraphQL에 대해 이해하셨나요? 앞서 말씀드린 Code-First 개발 방�
     
     ```
     STAGE = "development"
+    IS_PLAYGROUND_ENABLED = "1"
     ```
   
   - `.env.production`
     
     ```
     STAGE = "production"
+    IS_PLAYGROUND_ENABLED = "0"
     ```
 
   > 두 파일을 통해 각 스테이지에서 환경 변수를 설정 할 수 있습니다.

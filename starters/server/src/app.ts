@@ -13,7 +13,7 @@ if (process.env.NODE_ENV !== 'production') {
   })
 }
 
-import { Mutation, Query } from './schema'
+import * as types from './schema'
 
 const isPlaygroundEnabled = !!Number(process.env.IS_PLAYGROUND_ENABLED || '0')
 
@@ -27,10 +27,7 @@ app.get('/', (_req, res) => {
 
 const server = new ApolloServer({
   schema: makeSchema({
-    types: {
-      Query,
-      Mutation,
-    },
+    types,
     outputs: {
       schema: path.resolve('./src/generated', 'schema.graphql'),
       typegen: path.resolve('./src/generated', 'typegen.ts'),
