@@ -1,7 +1,7 @@
 # 2. Serverless로 GraphQL API 배포하기
 ### 본 챕터의 학습 목표는 아래와 같습니다. 👏
 - [ ] IAM에 대해 이해한다
-- [ ] API Gateway와 Lambda를 통한 서버리스 API 배포 대해 이해한다
+- [ ] API Gateway와 Lambda를 통한 서버리스 API 배포에 대해 이해한다
 - [ ] `aws-serverless-express`를 사용해, Node.js 앱을 Lambda에 배포한다
 
 ## (1) IAM 사용자 생성하기
@@ -53,6 +53,7 @@ AWS 계정 내 자원들을 내 컴퓨터에서 사용하기 위해서는 권한
           "iam:*",
           "apigateway:*",
           "s3:*",
+          "logs:*",
           "lambda:*",
           "cloudformation:*"
         ],
@@ -88,11 +89,84 @@ AWS 계정 내 자원들을 내 컴퓨터에서 사용하기 위해서는 권한
 
 
 ## (3) Serverless Framework을 사용해 Node.js 프로젝트 배포하기
+Serverless Framework은 IaC(Insfrastructure as Code)의 일종으로, 코드를 통해 원하는 Serverless 환경을 깔끔하게 구성 할 수 있습니다. Serverless Framework은 `serverless.yml` 설정 파일을 기반으로 구동됩니다.
+
+### 아키텍쳐
+
+우리는 Node.js로 구성된 API를 아래의 아키텍쳐로 배포 할 것입니다.
+
 ![](./images/diagram-1.png)
+
+해당 아키텍쳐는 이미 `/starters/server/serverless.yml`에 구성되어 있습니다. 함께 살펴볼까요?
+
+#### serverless.yml
+```yaml
+service: serverless-graphql-workshop
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  stage: ${opt:stage, 'dev'}
+  region: ap-northeast-2
+  profile: SERVERLESS_WORKSHOP
+
+package:
+  individually: true
+  excludeDevDependencies: false
+
+functions:
+  main:
+    name: ${self:service}-${self:provider.stage}
+    handler: dist/serverless.handler
+    memorySize: 1024
+    timeout: 10
+    environment:
+      NODE_ENV: production
+    package:
+      include:
+        - dist/serverless.js
+      exclude:
+        - '**'
+    events:
+      - http:
+          path: /
+          method: any
+      - http:
+          path: /{proxy+}
+          method: any
+
+plugins:
+  - serverless-apigw-binary
+  - serverless-dotenv-plugin
+
+custom:
+  apigwBinary:
+    types:
+      - '*/*'
+```
+
+`functions` 속성에서 해당 함수의 위치와 Route를 설정해주면 Serverless Framework이 자동으로 API Gateway와 Lambda를 설정합니다.
+
+또한, `serverless-dotenv-plugin`을 통해, 현재 프로젝트 폴더의 `.env.development`, `.env.production`에 기입된 환경 변수들을 Lambda 내 환경에 추가해줍니다.
+
+한번 배포해볼까요?
+
+### 배포
+아래의 스크립트를 `/starters/server` 내에서 실행합니다.
+
+```bash
+# TypeScript 프로젝트를 JavaScript로 빌드
+$ yarn build
+
+# 배포
+$ yarn deploy:dev
+```
+
+잠시 기다리면, 배포가 완료된 모습을 확인 할 수 있습니다.
 
 ## 학습 목표 확인하기
 - [x] IAM에 대해 이해한다
-- [x] API Gateway와 Lambda를 통한 서버리스 API 배포 대해 이해한다
+- [x] API Gateway와 Lambda를 통한 서버리스 API 배포에 대해 이해한다
 - [x] `aws-serverless-express`를 사용해, Node.js 앱을 Lambda에 배포한다
 
 ## 다음으로 이동
