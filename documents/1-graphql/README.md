@@ -1,4 +1,5 @@
 # 1. GraphQL 살펴보기
+
 ### 본 챕터의 학습 목표는 아래와 같습니다. 👏
 - [ ] GraphQL에 대해 이해한다
 - [ ] Node.js 환경에서 GraphQL 프로젝트를 시작한다
@@ -12,6 +13,7 @@ GraphQL은 API 설계(Schema)와 요청(Query)을 구조화하는 일련의 약�
 - 타입 시스템을 통해 개발 생산성을 비약적으로 향상 시킬 수 있습니다.
 - 제공되는 기본 개발자 도구를 통해 API를 쉽게 문서화하고 검색 할 수 있습니다.
 - 버전 관리 없이 API를 점진적으로 진화 시킬 수 있습니다.
+
 
 ## (2) GraphQL 타입 시스템과 쿼리, 뮤테이션 타입
 GraphQL의 기본 타입에는 다음 5가지가 존재합니다.
@@ -237,6 +239,7 @@ query {
 
 > 참고: [The Problems of "Schema-First" GraphQL Server Development](https://www.prisma.io/blog/the-problems-of-schema-first-graphql-development-x1mn4cb0tyl3)
 
+
 ## (3) Nexus로 시작하는 *Code-First* GraphQL 개발
 GraphQL에 대해 이해하셨나요? 앞서 말씀드린 *Code-First* 개발 방법에 대한 구현체로 Nexus라는 오픈소스 라이브러리를 Prisma에서 내놓았습니다.
 
@@ -385,6 +388,7 @@ GraphQL에 대해 이해하셨나요? 앞서 말씀드린 *Code-First* 개발 �
   }
   ```
 
+
 ## (4) GraphQL Playground
 API를 작성했다면, 해당 API가 정상적으로 동작하는지 테스트해보아야겠죠? 개발 서버를 띄워놓은 상태에서 `http://localhost:3000/graphql`로 접속하면, GraphQL 문서화 도구인, *GraphQL Playground*를 볼 수 있습니다.
 
@@ -407,6 +411,7 @@ mutation {
   ping
 }
 ```
+
 
 ## (5) `Task` 타입과 쿼리, 뮤테이션 만들기
 자 이제 우리만의 타입을 하나 만들어봅시다. `/src/schema` 폴더 내에 `task` 폴더를 새로 생성해줍니다. 그리고 그 아래
@@ -633,11 +638,13 @@ query {
 
 자, 그럼 이제 우리가 만든 API 서버를 Lambda에 배포해볼까요?
 
+
 ## 학습 목표 확인하기
 - [x] GraphQL에 대해 이해한다
 - [x] Node.js 환경에서 GraphQL 프로젝트를 시작한다
 - [x] *Schema-First* vs. *Code-First* 개념에 대해 이해한다
 - [x] Nexus 문법을 익힌다
+
 
 ## 다음으로 이동
 1. **GraphQL 살펴보기** ✔

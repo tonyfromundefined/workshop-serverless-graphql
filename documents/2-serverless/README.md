@@ -1,13 +1,15 @@
 # 2. Serverless로 GraphQL API 배포하기
+
 ### 본 챕터의 학습 목표는 아래와 같습니다. 👏
 - [ ] IAM에 대해 이해한다
 - [ ] API Gateway와 Lambda를 통한 서버리스 API 배포에 대해 이해한다
 - [ ] `aws-serverless-express`를 사용해, Node.js 앱을 Lambda에 배포한다
 
+
 ## (1) IAM 사용자 생성하기
 AWS 계정 내 자원들을 내 컴퓨터에서 사용하기 위해서는 권한 관련 설정을 컴퓨터에 주입하여야 합니다. 권한들을 담는 그릇에는 사용자와 역할 두 가지가 있는데, 그 중에 우리는 새 사용자를 생성하여 해당 사용자를 AWS CLI를 통해 컴퓨터에 주입해주도록 합니다.
 
-- [AWS Console](https://console.aws.amazon.com)에 로그인 후 `Find Services`에서 IAM을 검색, 클릭합니다
+- [AWS Console](https://console.aws.amazon.com)에 로그인 후 `Find Services`에서 `IAM`을 검색, 클릭합니다
 ![](./images/screenshot-1.png)
 
 - IAM 콘솔에 들어왔다면, `Users` 메뉴로 이동, `Add user` 버튼을 클릭합니다
@@ -69,6 +71,7 @@ AWS 계정 내 자원들을 내 컴퓨터에서 사용하기 위해서는 권한
 - `Name*` 항목에 `SERVERLESS_WORKSHOP_POLICY`라고 적어줍니다.
 - `Create policy` 버튼을 클릭합니다.
 ![](./images/screenshot-12.png)
+
 
 ## (2) AWS CLI로 내 컴퓨터에 IAM 사용자 등록하기
 > 아직 AWS CLI를 설치하지 않으셨나요? 핸즈온 진행을 위해서는 AWS CLI가 꼭 필요합니다. 아래 링크를 통해 AWS CLI를 컴퓨터에 설치해주세요.
@@ -164,10 +167,12 @@ $ yarn deploy:dev
 
 잠시 기다리면, 배포가 완료된 모습을 확인 할 수 있습니다.
 
+
 ## 학습 목표 확인하기
 - [x] IAM에 대해 이해한다
 - [x] API Gateway와 Lambda를 통한 서버리스 API 배포에 대해 이해한다
 - [x] `aws-serverless-express`를 사용해, Node.js 앱을 Lambda에 배포한다
+
 
 ## 다음으로 이동
 1. **GraphQL 살펴보기** ✔
