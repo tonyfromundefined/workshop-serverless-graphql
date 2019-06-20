@@ -338,7 +338,7 @@ GraphQL에 대해 이해하셨나요? 앞서 말씀드린 Code-First 개발 방�
 
 ## (4) GraphQL Playground
 
-## (5) 'Task' 타입과 쿼리, 뮤테이션 만들기
+## (5) `Task` 타입과 쿼리, 뮤테이션 만들기
 
 ---
 
