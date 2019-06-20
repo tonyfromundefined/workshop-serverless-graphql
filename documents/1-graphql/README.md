@@ -1,9 +1,9 @@
 # 1. GraphQL 살펴보기
 ### 본 챕터의 학습 목표는 아래와 같습니다. 👏
-- GraphQL 이해하기
-- Node.js 환경에서 GraphQL 프로젝트 시작하기
--`Schema-First` vs. `Code-First` 개념에 대해 이해하기
-- Nexus 문법 익히기
+- [ ] GraphQL 이해하기
+- [ ] Node.js 환경에서 GraphQL 프로젝트 시작하기
+- [ ] `Schema-First` vs. `Code-First` 개념에 대해 이해하기
+- [ ] Nexus 문법 익히기
 
 ## (1) GraphQL이란?
 GraphQL은 API 설계(Schema)와 요청(Query)을 구조화하는 일련의 약속(Interface)입니다. GraphQL을 통해서 우리는 데이터에 기반하여 API를 디자인 할 수 있으며, 클라이언트에서는 정해진 쿼리 언어를 통해 API를 체계적으로 사용 할 수 있습니다.
@@ -350,14 +350,6 @@ GraphQL에 대해 이해하셨나요? 앞서 말씀드린 Code-First 개발 방�
       })
     },
   })
-
-  /* `/src/generated/schema.graphql`에 자동 생성 됨
-
-  type Query {
-    stage: String!
-  }
-
-  */
   ```
 
   #### `/src/schema/Mutation.ts`
@@ -373,19 +365,22 @@ GraphQL에 대해 이해하셨나요? 앞서 말씀드린 Code-First 개발 방�
       })
     },
   })
-
-  /* `/src/generated/schema.graphql`에 자동 생성 됨
-
-  type Mutation {
-    ping: String!
-  }
-
-  */
   ```
 
   다음과 같이 Nexus를 통해서 코드를 작성하면, Nexus가 해당 코드를 이용해 `/src/generated/schema.graphql`을 자동으로 생성해줍니다. 따라서, *Schema-First*에서 존재했던 문제점인 **스키마 정의와 리졸버 간의 불일치 문제**와 **Schema 작성 문제**를 해결 할 수 있습니다.
 
   추가적으로 Nexus가 `/src/generated/typegen.ts`에 TypeScript 타이핑을 자동으로 생성해주기 때문에, GraphQL 타입 환경을 TypeScript 환경과 결합하여 초월적인 개발 편의성을 만끽 할 수 있습니다. (**IDE 지원 부족으로 인한 낮은 개발 경험** 문제 해결)
+
+  #### `/src/generated/schema.graphql`
+  ```graphql
+  type Query {
+    stage: String!
+  }
+
+  type Mutation {
+    ping: String!
+  }
+  ```
 
 ## (4) GraphQL Playground
 API를 작성했다면, 해당 API가 정상적으로 동작하는지 테스트해보아야겠죠? 개발 서버를 띄워놓은 상태에서 `http://localhost:3000/graphql`로 접속하면, GraphQL 문서화 도구인, **GraphQL Playground**를 볼 수 있습니다.
@@ -405,9 +400,241 @@ mutation {
 ```
 
 ## (5) `Task` 타입과 쿼리, 뮤테이션 만들기
+자 이제 우리만의 타입을 하나 만들어봅시다. `/src/schema` 폴더 내에 `task` 폴더를 새로 생성해줍니다. 그리고 그 아래
+
+- `/src/schema/task/index.ts` (`Task` 타입 정의 및 Query, Mutation을 받아서 export)
+- `/src/schema/task/Query.ts` (`Query` 타입을 확장)
+- `/src/schema/task/Mutation.ts` (`Mutation` 타입을 확장)
+
+파일을 생성해줍니다.
+
+각 파일을 작성해볼까요?
+
+#### `/src/schema/task/index.ts`
+```typescript
+import { objectType } from 'nexus'
+
+interface ITask {
+  id: string
+  content: string
+  isDone: boolean
+}
+
+// 가상의 Database
+export const TASKS: ITask[] = []
+
+export const Task = objectType({
+  name: 'Task',
+  definition(t) {
+    t.id('id', {
+      description: 'Task 생성 시 자동 생성되는 Unique ID',
+    })
+    t.string('content', {
+      description: 'Task 내용',
+    })
+    t.boolean('isDone', {
+      description: 'Task 완료 여부',
+    })
+  },
+})
+
+export * from './Query'
+export * from './Mutation'
+```
+
+#### `/src/schema/task/Query.ts`
+```typescript
+import { extendType, idArg } from 'nexus'
+import { TASKS } from './'
+
+export const TaskQueries = extendType({
+  type: 'Query',
+  definition(t) {
+    t.field('task', {
+      type: 'Task',
+      args: {
+        id: idArg(),
+      },
+      resolve: (_parent, args) => {
+        const task = TASKS.find((task) => task.id === args.id)
+
+        if (task) {
+          return task
+
+        } else {
+          throw new Error(`${args.id}를 가진 Task를 찾을 수 없습니다`)
+        }
+      },
+    })
+
+    t.list.field('tasks', {
+      type: 'Task',
+      resolve: () => {
+        return TASKS
+      },
+    })
+  },
+})
+```
+
+#### `/src/schema/task/Mutation.ts`
+```typescript
+import { booleanArg, extendType, idArg, stringArg } from 'nexus'
+import short from 'short-uuid'
+import { TASKS } from './'
+
+export const TaskMutations = extendType({
+  type: 'Mutation',
+  definition(t) {
+    t.field('createTask', {
+      type: 'Task',
+      args: {
+        content: stringArg({
+          required: true,
+        }),
+      },
+      resolve: (_parent, args) => {
+        const task = {
+          id: short.generate(),
+          content: args.content,
+          isDone: false,
+        }
+
+        TASKS.push(task)
+
+        return task
+      },
+    })
+
+    t.field('updateTask', {
+      type: 'Task',
+      args: {
+        id: idArg({
+          required: true,
+        }),
+        content: stringArg(),
+        isDone: booleanArg(),
+      },
+      resolve: async (_parent, args) => {
+        const taskIndex = TASKS.findIndex((task) => task.id === args.id)
+
+        if (taskIndex) {
+          if (args.content) {
+            TASKS[taskIndex].content = args.content
+          }
+          if (args.isDone) {
+            TASKS[taskIndex].isDone = args.isDone
+          }
+
+          return TASKS[taskIndex]
+
+        } else {
+          throw new Error(`${args.id}라는 ID를 가진 Task를 찾을 수 없습니다`)
+        }
+      },
+    })
+
+    t.field('deleteTask', {
+      type: 'Task',
+      args: {
+        id: idArg({
+          required: true,
+        }),
+      },
+      resolve: async (_parent, args) => {
+        const taskIndex = TASKS.findIndex((task) => task.id === args.id)
+
+        if (taskIndex) {
+          const task = TASKS[taskIndex]
+          TASKS.splice(taskIndex, 1)
+
+          return task
+
+        } else {
+          throw new Error(`${args.id}라는 ID를 가진 Task를 찾을 수 없습니다`)
+        }
+      },
+    })
+  },
+})
+```
+
+기존 schema 엔트리 파일을 수정해, Task 엔트리 파일을 내보냅니다.
+
+#### `/src/schema/index.ts`
+```typescript
+export * from './Query'
+export * from './Mutation'
+
+export * from './task'
+```
+
+Nexus가 자동으로 생성한 Schema를 살펴볼까요?
+```graphql
+### This file was autogenerated by GraphQL Nexus
+### Do not make changes to this file directly
+
+
+type Mutation {
+  createTask(content: String!): Task!
+  deleteTask(id: ID!): Task!
+  ping: String!
+  updateTask(content: String, id: ID!, isDone: Boolean): Task!
+}
+
+type Query {
+  stage: String!
+  task(id: ID): Task!
+  tasks: [Task!]!
+}
+
+type Task {
+  """Task 내용"""
+  content: String!
+
+  """Task 생성 시 자동 생성되는 Unique ID"""
+  id: ID!
+
+  """Task 완료 여부"""
+  isDone: Boolean!
+}
+```
+
+다음과 같이 Nexus를 활용하여, 빠르고 안정적으로 GraphQL 개발을 시작 할 수 있습니다.
+
+또한, 기존 *Schema-First* 방식과 다르게 Nexus의 *Code-First* 방식은 TypeScript 기반으로 코드를 자유롭게 분할 할 수 있기 때문에, 앞서 제기된 **GraphQL 스키마 분리 문제** 및 **스키마 정의의 중복 (코드 재사용 문제)** 를 해결 할 수 있습니다.
+
+자 그럼 이제, 우리가 만든 API 서버를 Lambda에 배포해볼까요?
+
+## 학습 목표 확인하기
+- [x] GraphQL 이해하기
+- [x] Node.js 환경에서 GraphQL 프로젝트 시작하기
+- [x] `Schema-First` vs. `Code-First` 개념에 대해 이해하기
+- [x] Nexus 문법 익히기
+
+## 다음으로 이동
+1. <span style="text-decoration: line-through;">**GraphQL 살펴보기**</span> ✔
+    1. <span style="text-decoration: line-through;">GraphQL이란?</span>
+    2. <span style="text-decoration: line-through;">GraphQL Type 시스템과 `Query`, `Mutation` Type</span>
+    3. <span style="text-decoration: line-through;">Nexus로 시작하는 *Code-First* GraphQL 개발</span>
+    4. <span style="text-decoration: line-through;">GraphQL Playground</span>
+    5. <span style="text-decoration: line-through;">`Task` 타입과 쿼리, 뮤테이션 만들기</span>
+2. **👉 [Serverless로 GraphQL API 배포하기](/documents/2-serverless)**
+    1. IAM 사용자 생성하기
+    2. Serverless Framework을 사용해 Node.js 프로젝트 배포하기
+3. AWS에 Prisma 배포하기 (CloudFormation)
+4. Prisma 사용하기
+    1. Prisma란?
+    2. Prisma 시작하기
+    3. Prisma Client 사용해보기
+    4. `nexus-prisma`를 사용해, Prisma 연결하기
+5. React.js에서 GraphQL 사용하기
+6. 삭제하기
+    1. API 배포 삭제하기
+    2. CloudFormation Stack 삭제하기
 
 ---
 
-### 참고 문헌
+### References
 - [GraphQL 영문 문서](https://graphql.org/)
 - [GraphQL 한국어 문서](https://graphql-kr.github.io/learn/schema/#)
