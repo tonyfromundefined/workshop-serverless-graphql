@@ -336,9 +336,9 @@ GraphQL에 대해 이해하셨나요? 앞서 말씀드린 Code-First 개발 방�
   > 개발 서버를 시작 한 뒤에는 `http://localhost:3000`로 접근 할 수 있습니다.
 
 
-## (4) 'Task' 타입과 쿼리, 뮤테이션 만들기
+## (4) GraphQL Playground
 
-## (5) GraphQL Playground
+## (5) 'Task' 타입과 쿼리, 뮤테이션 만들기
 
 ---
 

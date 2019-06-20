@@ -83,8 +83,8 @@
 1. [GraphQL 살펴보기](/documents/1-graphql)
     1. GraphQL이란?
     2. GraphQL Type 시스템과 `Query`, `Mutation` Type
-    3. Nexus로 시작하는 *Code-First* GraphQL 개발
-    4. GraphQL Playground
+    3. GraphQL Playground
+    4. Nexus로 시작하는 *Code-First* GraphQL 개발
 2. [Serverless로 GraphQL API 배포하기](/documents/2-serverless)
     1. IAM 사용자 생성하기
     2. Serverless Framework을 사용해 Node.js 프로젝트 배포하기
