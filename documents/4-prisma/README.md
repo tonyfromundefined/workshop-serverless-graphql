@@ -10,28 +10,33 @@
 ## (1) Prisma란?
 
 ### 출발
-Prisma는 Graphcool이라는 서비스로부터 시작되었습니다.
+Prisma는 *Graphcool*이라는 서비스로부터 시작되었습니다.
 
+#### Graphcool
 ![](./images/diagram-1.png)
 
-*Graphcool*은 GraphQL 기반 BaaS(Backend as a service)로, 프론트엔드 개발자들이 더 쉽게 백엔드를 개발 할 수 있도록 하는 서비스입니다. GraphQL Schema 기반으로 데이터 모델을 구축하면 *Graphcool*이 이를 인식, CRUD(Create, Read, Update, Delete) GraphQL API를 생성해주는 서비스입니다. Prisma는 해당 서비스를 2년간 운영하면서 몇가지 문제를 만났습니다.
+*Graphcool*은 GraphQL 기반 오픈소스 BaaS(Backend as a service)로, 프론트엔드 개발자들이 더 쉽게 백엔드를 개발 할 수 있도록 도와주는 서비스입니다. GraphQL SDL(Schema Definition Language) 기반으로 데이터 모델을 구축하면 *Graphcool*이 이를 인식, CRUD(Create, Read, Update, Delete) GraphQL API를 생성해주는 서비스입니다. Prisma는 해당 서비스를 2년간 운영하면서 **몇가지 문제**를 만났습니다.
 
-- *Graphcool*은 사용하기 쉽기 때문에 큰 사랑을 받았습니다. 개발자는 빠른 프로토타이핑을 위해 이 도구를 적극적으로 사용했지만, 실제 프로덕션 환경에서 자체 GraphQL 서버를 구축 할 때는 이 도구를 사용 할 수 없었습니다.
-- 개발자는 백엔드에서보다 많은 제어와 유연성을 원했습니다. 예를 들면 다음과 같습니다.
+- *Graphcool*은 사용하기 쉽기 때문에 큰 사랑을 받았습니다. 개발자는 빠른 프로토타이핑을 위해 이 도구를 적극적으로 사용했지만, 실제 프로덕션 환경에서 자체 GraphQL 서버를 구축 할 때는 이 도구를 사용하기 힘들었습니다.
+- 백엔드 개발자는 보다 많은 제어와 유연성을 원했습니다. 예를 들면 다음과 같습니다.
   - API 계층에서 데이터베이스 분리
-  - 자신만의 도메인 중심 GraphQL 스키마 정의 (일반 CRUD 대신)
-  - 프로그래밍 언어, 프레임 워크, 테스트 및 CI / CD 도구 선택시 유연성 제공
+  - 자신만의 도메인 중심 GraphQL 스키마 정의 (일반적인 CRUD 대신)
+  - 프로그래밍 언어, 프레임 워크, 테스트 및 CI/CD 도구 선택 시 유연성 제공
 
+#### Prisma 1.0 + Prisma Bindings
 ![](./images/diagram-2.png)
-이를 극복하기 위해, *Graphcool*은 현재의 *Prisma*로 브랜딩을 변경하고 *Graphcool*의 *Query Engine* 컴포넌트를 가지고 *Prisma bindings*라는 새로운 서비스를 출시하게 되었습니다. 이를 통해, Prisma가 SDL(Schema Definition Language)을 기반으로 자동으로 생성해준 GraphQL CRUD 쿼리/뮤테이션을 GraphQL API에 포함하여 빠르게 백엔드를 개발 할 수 있습니다.
+이를 해결하기 위해, *Graphcool*의 *Query Engine* 컴포넌트를 가지고 *Prisma bindings*라는 새로운 서비스를 출시하게 되었습니다. 이를 통해, Prisma가 SDL(Schema Definition Language)을 기반으로 자동으로 생성해준 GraphQL CRUD 쿼리/뮤테이션을 GraphQL API에 포함하여 빠르게 백엔드를 개발 할 수 있습니다.
 
+또한 회사 브랜드 역시 *Graphcool*에서 *Prisma*로 완전히 전환하고, 앞으로 Prisma에 더 힘을 쓰게 됩니다.
+
+#### Prisma Client
 ![](./images/diagram-3.png)
-이에 더 나아가서, Prisma는 GraphQL Client라는 신규 라이브러리를 통해 GraphQL API가 아니더라도 ORM처럼 Prisma를 사용 할 수 있게 되었습니다. GraphQL의 타입 시스템을 기반으로 만들어진 Type-Safe ORM은 백엔드 개발에 날개를 달아 줄 것입니다.
+이에 더 나아가서, Prisma는 Prisma Client라는 신규 라이브러리를 통해 API 환경이 GraphQL이 아니더라도 ORM과 같이 Prisma를 사용 할 수 있게 하였습니다. GraphQL의 타입 시스템을 기반으로 만들어진 Type-Safe ORM은 백엔드 개발에 날개를 달아줍니다.
 
 ### Prisma를 통해 테이블과 CRUD 생성
-SDL로 데이터 모델을 정의하면, Prisma는 해당 데이터 모델을 기반으로 RDBMS에 테이블을 생성하고, Prisma Server 내에, 해당 CRUD 쿼리/뮤테이션을 생성합니다.
+일반적인 ORM과 비슷하게, SDL(Schema Definition Langauge)로 데이터 모델을 정의하면, Prisma는 해당 데이터 모델을 기반으로 RDBMS에 테이블을 생성하고, Prisma Server 내부에, 해당 데이터 모델에 대한 CRUD 쿼리/뮤테이션을 생성합니다.
 
-#### `prisma.datamodel`
+#### `datamodel.prisma`
 ```graphql
 type Task {
   id: ID!
