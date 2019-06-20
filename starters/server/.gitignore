@@ -1,0 +1,8 @@
+.env
+.env.development
+.env.production
+
+prisma.yml
+datamodel.prisma
+
+generated

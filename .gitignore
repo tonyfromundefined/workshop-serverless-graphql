@@ -3,14 +3,5 @@
 node_modules
 yarn-error.log
 
-generated
-
 dist
 .serverless
-
-.env
-.env.development
-.env.production
-
-prisma.yml
-datamodel.prisma
