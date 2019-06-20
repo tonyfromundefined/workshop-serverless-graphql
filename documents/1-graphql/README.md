@@ -257,7 +257,7 @@ GraphQL에 대해 이해하셨나요? 앞서 말씀드린 *Code-First* 개발 �
 - `package.json`, `yarn.lock`
   - 현재 프로젝트가 의존하고 있는 라이브러리와 버전 정보를 담고 있습니다
   - `yarn` 명령어를 통해 라이브러리를 모두 설치 할 수 있습니다.
-- `tsconfig.json
+- `tsconfig.json`
   - TypeScript 관련 설정 파일입니다.
 - `tslint.json`
   - TSLint 관련 설정 파일입니다.
