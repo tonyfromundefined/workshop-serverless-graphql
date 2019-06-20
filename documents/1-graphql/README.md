@@ -227,7 +227,7 @@ query {
 1. 스키마 정의와 리졸버 간의 불일치 문제
 2. GraphQL 스키마 분리 문제
 3. 스키마 정의의 중복 (코드 재사용 문제)
-4. IDE 지원 부족 및 개발자 경험
+4. IDE 지원 부족으로 인한 낮은 개발 경험
 5. Schema 작성 문제
 
 따라서, 이러한 한계점을 효과적으로 해결하기 위해 *Code-First* 개발 방식이 등장하게 되었습니다.
@@ -335,6 +335,57 @@ GraphQL에 대해 이해하셨나요? 앞서 말씀드린 Code-First 개발 방�
   ```
   > 개발 서버를 시작 한 뒤에는 `http://localhost:3000`로 접근 할 수 있습니다.
 
+- Nexus 기반으로 작성된 `Query`와 `Mutation` 살펴보기
+
+  #### `/src/schema/Query.ts`
+  ```typescript
+  import { queryType } from 'nexus'
+
+  export const Query = queryType({
+    definition(t) {
+      t.string('stage', {
+        resolve: (_parent, _args, _context) => {
+          return process.env.STAGE as string
+        },
+      })
+    },
+  })
+
+  /* `/src/generated/schema.graphql`
+
+  type Query {
+    stage: String!
+  }
+
+  */
+  ```
+
+  #### `/src/schema/Mutation.ts`
+  ```typescript
+  import { mutationType } from 'nexus'
+
+  export const Mutation = mutationType({
+    definition(t) {
+      t.string('ping', {
+        resolve: (_parent, _args, _context) => {
+          return 'pong'
+        },
+      })
+    },
+  })
+
+  /* `/src/generated/schema.graphql`
+
+  type Mutation {
+    ping: String!
+  }
+
+  */
+  ```
+
+  다음과 같이 Nexus를 통해서 코드를 작성하면, Nexus가 해당 코드를 이용해 `/src/generated/schema.graphql`을 자동으로 생성해줍니다. 따라서, *Schema-First*에서 존재했던 문제점인 **스키마 정의와 리졸버 간의 불일치 문제**와 **Schema 작성 문제**를 해결 할 수 있습니다.
+
+  추가적으로 Nexus가 `/src/generated/typegen.ts`에 TypeScript 타이핑을 자동으로 생성해주기 때문에, GraphQL 타입 환경을 TypeScript 환경과 결합하여 초월적인 개발 편의성을 만끽 할 수 있습니다. (**IDE 지원 부족으로 인한 낮은 개발 경험** 문제 해결)
 
 ## (4) GraphQL Playground
 
