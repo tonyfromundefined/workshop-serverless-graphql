@@ -80,25 +80,26 @@
 
 
 ## 자 그럼 이제 시작해볼까요?
-1. [GraphQL 살펴보기](/documents/1-graphql)
+1. [GraphQL 살펴보기](/documents/1-graphql/README.md)
     1. GraphQL이란?
     2. GraphQL Type 시스템과 `Query`, `Mutation` Type
     3. Nexus로 시작하는 *Code-First* GraphQL 개발
     4. GraphQL Playground
     5. `Task` 타입과 쿼리, 뮤테이션 만들기
-2. [Serverless로 GraphQL API 배포하기](/documents/2-serverless)
+2. [Serverless로 GraphQL API 배포하기](/documents/2-serverless/README.md)
     1. IAM 사용자 생성하기
     2. Serverless Framework을 사용해 Node.js 프로젝트 배포하기
-3. [AWS에 Prisma 배포하기 (CloudFormation)](/documents/3-prisma-on-aws)
-4. [Prisma 사용하기](/documents/4-prisma)
+3. [AWS에 Prisma 배포하기 (CloudFormation)](/documents/3-prisma-on-aws/README.md)
+4. [Prisma 사용하기](/documents/4-prisma/README.md)
     1. Prisma란?
     2. Prisma 시작하기
     3. Prisma Client 사용해보기
     4. `nexus-prisma`를 사용해, Prisma 연결하기
-5. [React.js에서 GraphQL API 사용하기](/documents/5-react-graphql)
-6. [삭제하기](/documents/6-delete)
+5. [React.js에서 GraphQL API 사용하기](/documents/5-react-graphql/README.md)
+6. [삭제하기](/documents/6-delete/README.md)
     1. API 배포 삭제하기
     2. CloudFormation Stack 삭제하기
+    3. IAM 사용자 삭제하기
 
 ## 할 일
 Feature Request를 원하시면, 새 이슈를 생성해주세요. 또한, Pull Request는 언제나 환영입니다.🙏

@@ -653,7 +653,7 @@ query {
     3. Nexus로 시작하는 *Code-First* GraphQL 개발
     4. GraphQL Playground
     5. `Task` 타입과 쿼리, 뮤테이션 만들기
-2. **👉 [Serverless로 GraphQL API 배포하기](/documents/2-serverless)**
+2. **👉 [Serverless로 GraphQL API 배포하기](/documents/2-serverless/README.md)**
     1. IAM 사용자 생성하기
     2. Serverless Framework을 사용해 Node.js 프로젝트 배포하기
 3. AWS에 Prisma 배포하기 (CloudFormation)
@@ -666,6 +666,7 @@ query {
 6. 삭제하기
     1. API 배포 삭제하기
     2. CloudFormation Stack 삭제하기
+    3. IAM 사용자 삭제하기
 
 ---
 

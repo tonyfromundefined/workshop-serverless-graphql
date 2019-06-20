@@ -184,7 +184,7 @@ $ yarn deploy:dev
 2. **Serverless로 GraphQL API 배포하기** ✔
     1. IAM 사용자 생성하기
     2. Serverless Framework을 사용해 Node.js 프로젝트 배포하기
-3. **👉 [AWS에 Prisma 배포하기 (CloudFormation)](/documents/3-prisma-on-aws)**
+3. **👉 [AWS에 Prisma 배포하기 (CloudFormation)](/documents/3-prisma-on-aws/README.md)**
 4. Prisma 사용하기
     1. Prisma란?
     2. Prisma 시작하기
@@ -194,3 +194,5 @@ $ yarn deploy:dev
 6. 삭제하기
     1. API 배포 삭제하기
     2. CloudFormation Stack 삭제하기
+    3. IAM 사용자 삭제하기
+

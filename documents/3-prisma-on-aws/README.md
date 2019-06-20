@@ -86,7 +86,7 @@ CloudFormation 역시 Serverless Framework과 같은 IaC의 일종입니다. Clo
     1. IAM 사용자 생성하기
     2. Serverless Framework을 사용해 Node.js 프로젝트 배포하기
 3. **AWS에 Prisma 배포하기 (CloudFormation)** ✔
-4. **👉 [Prisma 사용하기](/documents/4-prisma)**
+4. **👉 [Prisma 사용하기](/documents/4-prisma/README.md)**
     1. Prisma란?
     2. Prisma 시작하기
     3. Prisma Client 사용해보기
@@ -95,3 +95,4 @@ CloudFormation 역시 Serverless Framework과 같은 IaC의 일종입니다. Clo
 6. 삭제하기
     1. API 배포 삭제하기
     2. CloudFormation Stack 삭제하기
+    3. IAM 사용자 삭제하기
