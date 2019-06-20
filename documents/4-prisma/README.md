@@ -28,7 +28,7 @@ Prisma는 Graphcool이라는 서비스로부터 시작되었습니다.
 ![](./images/diagram-3.png)
 이에 더 나아가서, Prisma는 GraphQL Client라는 신규 라이브러리를 통해 GraphQL API가 아니더라도 ORM처럼 Prisma를 사용 할 수 있게 되었습니다. GraphQL의 타입 시스템을 기반으로 만들어진 Type-Safe ORM은 백엔드 개발에 날개를 달아 줄 것입니다.
 
-### CRUD 생성하기
+### Prisma를 통해 테이블과 CRUD 생성
 SDL로 데이터 모델을 정의하면, Prisma는 해당 데이터 모델을 기반으로 RDBMS에 테이블을 생성하고, Prisma Server 내에, 해당 CRUD 쿼리/뮤테이션을 생성합니다.
 
 #### `prisma.datamodel`
