@@ -1,0 +1,49 @@
+service: serverless-graphql-workshop
+
+plugins:
+  - serverless-apigw-binary
+  - serverless-dotenv-plugin
+
+package:
+  individually: true
+  excludeDevDependencies: false
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  stage: ${opt:stage, 'dev'}
+  region: ap-northeast-2
+  profile: SERVERLESS_GRAPHQL_WORKSHOP
+
+custom:
+  #######################################
+  # 자원 이름에 포함되는 Unique ID
+  # 첫 배포시에 랜덤 값으로 바꿔주세요 (배포 업데이트 및 삭제 시에는 바꾸지 않습니다.)
+  # 랜덤 값 생성: https://www.random.org/strings/?num=1&len=6&digits=on&loweralpha=on&unique=on&format=html&rnd=new
+  stackId: 'joei4q'
+  #######################################
+
+  apigwBinary:
+    types:
+      - '*/*'
+
+functions:
+  main:
+    name: ${self:service}-${self:custom.stackId}-${self:provider.stage}-main
+    handler: dist/serverless.handler
+    memorySize: 1024
+    timeout: 10
+    environment:
+      NODE_ENV: production
+    package:
+      include:
+        - dist/serverless.js
+      exclude:
+        - '**'
+    events:
+      - http:
+          path: /
+          method: any
+      - http:
+          path: /{proxy+}
+          method: any

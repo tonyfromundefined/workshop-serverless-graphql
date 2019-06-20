@@ -244,7 +244,7 @@ GraphQL에 대해 이해하셨나요? 앞서 말씀드린 Code-First 개발 방�
 - Webpack
 - Nexus
 
-를 기반으로 하는 실제 GraphQL 프로젝트를 살펴보겠습니다. 해당 프로젝트는 본 레포 안의 `/projects/server` 폴더 안에서 찾을 수 있습니다.
+를 기반으로 하는 실제 GraphQL 프로젝트를 살펴보겠습니다. 해당 프로젝트는 본 레포 안의 `/starters/server` 폴더 안에서 찾을 수 있습니다.
 
 ### 폴더 및 파일 구조
 
