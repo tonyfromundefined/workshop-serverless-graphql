@@ -1,53 +1,43 @@
 import { ApolloServer } from 'apollo-server-express'
 import cors from 'cors'
+import dotenv from 'dotenv'
 import express from 'express'
 import {
   makeSchema,
-  mutationType,
-  queryType,
 } from 'nexus'
 import path from 'path'
 
-const isProd = process.env.NODE_ENV === 'production'
-const isStageDevelopment = !isProd || process.env.STAGE === 'development'
+if (process.env.NODE_ENV !== 'production') {
+  dotenv.config({
+    path: './.env.development',
+  })
+}
+
+import { Mutation, Query } from './schema'
+
+const isPlaygroundEnabled = !!Number(process.env.IS_PLAYGROUND_ENABLED || '0')
 
 const app = express()
 
 app.use(cors())
 
 app.get('/', (_req, res) => {
-  res.json('ok')
+  return res.json('ok')
 })
 
 const server = new ApolloServer({
   schema: makeSchema({
     types: {
-      Query: queryType({
-        definition(t) {
-          t.string('stage', {
-            resolve: () => {
-              return process.env.STAGE as string
-            },
-          })
-        },
-      }),
-      Mutation: mutationType({
-        definition(t) {
-          t.string('ping', {
-            resolve: () => {
-              return 'pong'
-            },
-          })
-        },
-      }),
+      Query,
+      Mutation,
     },
     outputs: {
       schema: path.resolve('./src/generated', 'schema.graphql'),
       typegen: path.resolve('./src/generated', 'typegen.ts'),
     },
   }),
-  introspection: isStageDevelopment,
-  playground: isStageDevelopment,
+  introspection: isPlaygroundEnabled,
+  playground: isPlaygroundEnabled,
 })
 
 server.applyMiddleware({
