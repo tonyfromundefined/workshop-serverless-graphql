@@ -1,9 +1,9 @@
 # 1. GraphQL 살펴보기
 ### 본 챕터의 학습 목표는 아래와 같습니다. 👏
-- [ ] GraphQL 이해하기
-- [ ] Node.js 환경에서 GraphQL 프로젝트 시작하기
-- [ ] *Schema-First* vs. *Code-First* 개념에 대해 이해하기
-- [ ] Nexus 문법 익히기
+- [ ] GraphQL에 대해 이해한다
+- [ ] Node.js 환경에서 GraphQL 프로젝트를 시작한다
+- [ ] *Schema-First* vs. *Code-First* 개념에 대해 이해한다
+- [ ] Nexus 문법을 익힌다
 
 ## (1) GraphQL이란?
 GraphQL은 API 설계(Schema)와 요청(Query)을 구조화하는 일련의 약속(Interface)입니다. GraphQL을 통해서 우리는 데이터에 기반하여 API를 디자인 할 수 있으며, 클라이언트에서는 정해진 쿼리 언어를 통해 API를 체계적으로 사용 할 수 있습니다.
@@ -634,18 +634,18 @@ query {
 자, 그럼 이제 우리가 만든 API 서버를 Lambda에 배포해볼까요?
 
 ## 학습 목표 확인하기
-- [x] GraphQL 이해하기
-- [x] Node.js 환경에서 GraphQL 프로젝트 시작하기
-- [x] *Schema-First* vs. *Code-First* 개념에 대해 이해하기
-- [x] Nexus 문법 익히기
+- [x] GraphQL에 대해 이해한다
+- [x] Node.js 환경에서 GraphQL 프로젝트를 시작한다
+- [x] *Schema-First* vs. *Code-First* 개념에 대해 이해한다
+- [x] Nexus 문법을 익힌다
 
 ## 다음으로 이동
-1. <span style="text-decoration: line-through;">**GraphQL 살펴보기**</span> ✔
-    1. <span style="text-decoration: line-through;">GraphQL이란?</span>
-    2. <span style="text-decoration: line-through;">GraphQL Type 시스템과 `Query`, `Mutation` Type</span>
-    3. <span style="text-decoration: line-through;">Nexus로 시작하는 *Code-First* GraphQL 개발</span>
-    4. <span style="text-decoration: line-through;">GraphQL Playground</span>
-    5. <span style="text-decoration: line-through;">`Task` 타입과 쿼리, 뮤테이션 만들기</span>
+1. **GraphQL 살펴보기** ✔
+    1. GraphQL이란?
+    2. GraphQL Type 시스템과 `Query`, `Mutation` Type
+    3. Nexus로 시작하는 *Code-First* GraphQL 개발
+    4. GraphQL Playground
+    5. `Task` 타입과 쿼리, 뮤테이션 만들기
 2. **👉 [Serverless로 GraphQL API 배포하기](/documents/2-serverless)**
     1. IAM 사용자 생성하기
     2. Serverless Framework을 사용해 Node.js 프로젝트 배포하기

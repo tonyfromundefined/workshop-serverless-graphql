@@ -29,7 +29,7 @@ custom:
 
 functions:
   main:
-    name: ${self:service}-${self:custom.stackId}-${self:provider.stage}-main
+    name: ${self:service}-${self:custom.stackId}-${self:provider.stage}
     handler: dist/serverless.handler
     memorySize: 1024
     timeout: 10
