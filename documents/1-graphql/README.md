@@ -246,8 +246,78 @@ GraphQL에 대해 이해하셨나요? 앞서 말씀드린 Code-First 개발 방�
 
 를 기반으로 하는 실제 GraphQL 프로젝트를 살펴보겠습니다. 해당 프로젝트는 본 레포 안의 `/starters/server` 폴더 안에서 찾을 수 있습니다.
 
-### 폴더 및 파일 구조
+### 폴더 및 파일 구조 살펴보기
+#### `/`
+- `.env.example`
+  - 환경변수 설정 파일입니다.
+  - `.env.example`를 참고하여 폴더 내에 `.env.development`와 `.env.production`을 만들어줍니다.
+- `package.json`, `yarn.lock`
+  - 현재 프로젝트가 의존하고 있는 라이브러리와 버전 정보를 담고 있습니다
+  - `yarn` 명령어를 통해 라이브러리를 모두 설치 할 수 있습니다.
+- `tsconfig.json
+  - TypeScript 관련 설정 파일입니다.
+- `tslint.json`
+  - TSLint 관련 설정 파일입니다.
+- `webpack.config.dev.js`
+  - 개발 모드의 Webpack 빌드 설정입니다.
+  - `yarn dev` 명령에서 해당 설정으로 Webpack이 작동합니다.
+- `webpack.config.prod.js`
+  - Production 모드의 Webpack 빌드 설정입니다.
+  - `yarn build` 명령에서 해당 설정으로 Webpack이 작동합니다.
+- `serverless.yml`
+  - 배포를 위한 Serverless Framework 설정입니다.
 
+#### `/src/`
+- `app.ts`
+  - Express.js 프레임워크를 통해 API가 구현되는 엔트리 파일입니다. 만들어진 API 서버를 export 합니다.
+- `server.ts`
+  - `app.ts`에서 API 서버를 가져와 특정 (3000 또는 80) 포트로 Listen합니다.
+  - 개발 및 EC2, ECS 등 기존 컴퓨팅 환경에 배포 할 때 사용합니다.
+- `serverless.ts`
+  - `app.ts`에서 API 서버를 가져와 `aws-serverless-express`를 사용하여, Lambda 요청에 응답하는 함수를 초기화합니다.
+  - API Gateway와 Lambda 기반의 서버리스 환경에 배포 할 때 사용합니다.
+
+
+### 시작하기
+- `/starters/server/` 폴더로 이동합니다.
+
+  ```bash
+  $ cd ./starters/server
+  ```
+
+- 프로젝트에 필요한 라이브러리를 설치합니다.
+
+  ```bash
+  # 기존에 yarn이 설치되어 있지 않다면,
+  $ npm i -g yarn
+
+  # 라이브러리 설치하기
+  $ yarn
+  ```
+
+  > 해당 작업이 완료되면 `node_modules` 폴더가 생성되고 해당 폴더 아래에 필요한 라이브러리들이 위치하게 됩니다.
+
+- 프로젝트 폴더에 아래 두 파일을 생성합니다.
+  - `.env.development`
+    
+    ```
+    STAGE = "development"
+    ```
+  
+  - `.env.production`
+    
+    ```
+    STAGE = "production"
+    ```
+
+  > 두 파일을 통해 각 스테이지에서 환경 변수를 설정 할 수 있습니다.
+
+- 개발 서버 시작하기
+
+  ```bash
+  $ yarn dev
+  ```
+  > 개발 서버를 시작 한 뒤에는 `http://localhost:3000`로 접근 할 수 있습니다.
 
 
 ## (4) 'Task' 타입과 쿼리, 뮤테이션 만들기

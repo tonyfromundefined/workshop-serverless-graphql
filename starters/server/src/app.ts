@@ -15,6 +15,10 @@ const app = express()
 
 app.use(cors())
 
+app.get('/', (_req, res) => {
+  res.json('ok')
+})
+
 const server = new ApolloServer({
   schema: makeSchema({
     types: {
