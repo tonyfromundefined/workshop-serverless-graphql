@@ -2,7 +2,7 @@
 ### 본 챕터의 학습 목표는 아래와 같습니다. 👏
 - [ ] GraphQL 이해하기
 - [ ] Node.js 환경에서 GraphQL 프로젝트 시작하기
-- [ ] `Schema-First` vs. `Code-First` 개념에 대해 이해하기
+- [ ] *Schema-First* vs. *Code-First* 개념에 대해 이해하기
 - [ ] Nexus 문법 익히기
 
 ## (1) GraphQL이란?
@@ -238,7 +238,7 @@ query {
 > 참고: [The Problems of "Schema-First" GraphQL Server Development](https://www.prisma.io/blog/the-problems-of-schema-first-graphql-development-x1mn4cb0tyl3)
 
 ## (3) Nexus로 시작하는 *Code-First* GraphQL 개발
-GraphQL에 대해 이해하셨나요? 앞서 말씀드린 Code-First 개발 방법에 대한 구현체로 Nexus라는 오픈소스 라이브러리를 Prisma에서 내놓았습니다.
+GraphQL에 대해 이해하셨나요? 앞서 말씀드린 *Code-First* 개발 방법에 대한 구현체로 Nexus라는 오픈소스 라이브러리를 Prisma에서 내놓았습니다.
 
 이 챕터에서는
 
@@ -636,7 +636,7 @@ query {
 ## 학습 목표 확인하기
 - [x] GraphQL 이해하기
 - [x] Node.js 환경에서 GraphQL 프로젝트 시작하기
-- [x] `Schema-First` vs. `Code-First` 개념에 대해 이해하기
+- [x] *Schema-First* vs. *Code-First* 개념에 대해 이해하기
 - [x] Nexus 문법 익히기
 
 ## 다음으로 이동
