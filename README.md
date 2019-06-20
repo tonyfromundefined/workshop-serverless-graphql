@@ -105,6 +105,6 @@ Feature Request를 원하시면, 새 이슈를 생성해주세요. 또한, Pull 
 
 ---
 
-### 부록
-- [완성된 서버 프로젝트](/projects/server)
-- [완성된 클라이언트 프로젝트](/projects/client)
+### Cheatsheets
+- [완성된 서버 프로젝트](/cheatsheet/server)
+- [완성된 클라이언트 프로젝트](/cheatsheet/client)
