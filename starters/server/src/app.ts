@@ -1,17 +1,10 @@
 import { ApolloServer } from 'apollo-server-express'
 import cors from 'cors'
-import dotenv from 'dotenv'
 import express from 'express'
 import {
   makeSchema,
 } from 'nexus'
 import path from 'path'
-
-if (process.env.NODE_ENV !== 'production') {
-  dotenv.config({
-    path: './.env.development',
-  })
-}
 
 import * as types from './schema'
 

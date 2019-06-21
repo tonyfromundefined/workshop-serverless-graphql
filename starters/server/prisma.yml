@@ -1,0 +1,11 @@
+endpoint: ${env:PRISMA_ENDPOINT}
+datamodel: datamodel.prisma
+
+generate:
+  - generator: typescript-client
+    output: ./src/generated/prisma/
+
+hooks:
+  post-deploy:
+    - prisma generate
+    - nexus-prisma-generate --output ./src/generated/nexus-prisma
