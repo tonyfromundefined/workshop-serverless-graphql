@@ -1,0 +1,5 @@
+mutation updateTask($data: TaskUpdateInput!, $where: TaskWhereUniqueInput!) {
+  updateTask(data: $data, where: $where) {
+    id
+  }
+}
