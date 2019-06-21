@@ -87,20 +87,38 @@ $ prisma deploy
 - CLI에서 다음과 같이 입력합니다.
 
   ```bash
-  yarn prisma:migrate:dev
+  yarn prisma:deploy:dev
   ```
   ![](./images/screenshot-1.png)
 
 - Prisma가 RDBMS에 해당 데이터 모델과 일치하는 테이블을 생성했습니다.
 ![](./images/screenshot-2.png)
 
-- CLI 결과로 출력된 엔드포인트 링크로 들어가면, CRUD 쿼리/뮤테이션이 생성된 모습을 확인 할 수 있습니다.
-![](./images/screenshot-3.png)
+- Prisma에 직접 접근하기 위해서는 토큰 발급이 필요합니다. CLI에서 다음과 같이 입력하면, 새 토큰을 발급 받을 수 있습니다.
 
-- 또, CLI 결과로 출력된 `Prisma Admin` 링크로 들어가면, 데이터를 생성, 수정, 삭제 할 수 있는 어드민 페이지를 확인 할 수 있습니다.
+  ```bash
+  yarn prisma:token:dev
+  ```
+  ![](./images/screenshot-3.png)
+
+
+- CLI 결과로 출력된 엔드포인트 링크로 들어가서 하단의 `HTTP HEADERS`내에 해당 토큰을 삽입해주면, CRUD 쿼리/뮤테이션이 생성된 모습을 확인 할 수 있습니다.
+
+  ```json
+  {
+    "Authorization": "Bearer {생성된 토큰}"
+  }
+  ```
   ![](./images/screenshot-4.png)
 
-  - CLI에 다음 명령어를 입력하면 Prisma Admin으로 바로 이동 할 수 있습니다.
+- 또, CLI 결과로 출력된 `Prisma Admin` 링크로 들어가면, 데이터를 생성, 수정, 삭제 할 수 있는 어드민 페이지를 확인 할 수 있습니다. 우측 상단 설정 버튼을 눌러 토큰을 입력해줍니다.
+![](./images/screenshot-5.png)
+![](./images/screenshot-6.png)
+
+- 올바른 토큰임이 확인되면, 데이터를 생성, 수정, 삭제 할 수 있습니다.
+![](./images/screenshot-7.png)
+
+  - CLI에 다음 명령어를 입력하면 토큰 입력 과정 없이 Prisma Admin을 바로 사용 할 수 있습니다.
 
     ```bash
     $ yarn prisma:admin:dev
