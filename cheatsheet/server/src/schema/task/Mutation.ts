@@ -1,6 +1,5 @@
 import { booleanArg, extendType, idArg, stringArg } from 'nexus'
-import short from 'short-uuid'
-import { TASKS } from './'
+import { prisma } from '~/generated/prisma'
 
 export const TaskMutations = extendType({
   type: 'Mutation',
@@ -13,15 +12,10 @@ export const TaskMutations = extendType({
         }),
       },
       resolve: (_parent, args) => {
-        const task = {
-          id: short.generate(),
+        return prisma.createTask({
           content: args.content,
           isDone: false,
-        }
-
-        TASKS.push(task)
-
-        return task
+        })
       },
     })
 
@@ -34,22 +28,16 @@ export const TaskMutations = extendType({
         content: stringArg(),
         isDone: booleanArg(),
       },
-      resolve: async (_parent, args) => {
-        const taskIndex = TASKS.findIndex((task) => task.id === args.id)
-
-        if (taskIndex) {
-          if (args.content) {
-            TASKS[taskIndex].content = args.content
-          }
-          if (args.isDone) {
-            TASKS[taskIndex].isDone = args.isDone
-          }
-
-          return TASKS[taskIndex]
-
-        } else {
-          throw new Error(`${args.id}라는 ID를 가진 Task를 찾을 수 없습니다`)
-        }
+      resolve: (_parent, args) => {
+        return prisma.updateTask({
+          data: {
+            content: args.content,
+            isDone: args.isDone,
+          },
+          where: {
+            id: args.id,
+          },
+        })
       },
     })
 
@@ -60,18 +48,10 @@ export const TaskMutations = extendType({
           required: true,
         }),
       },
-      resolve: async (_parent, args) => {
-        const taskIndex = TASKS.findIndex((task) => task.id === args.id)
-
-        if (taskIndex) {
-          const task = TASKS[taskIndex]
-          TASKS.splice(taskIndex, 1)
-
-          return task
-
-        } else {
-          throw new Error(`${args.id}라는 ID를 가진 Task를 찾을 수 없습니다`)
-        }
+      resolve: (_parent, args) => {
+        return prisma.deleteTask({
+          id: args.id,
+        })
       },
     })
   },

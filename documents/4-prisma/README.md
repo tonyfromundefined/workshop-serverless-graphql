@@ -89,12 +89,17 @@ $ prisma deploy
   ```bash
   yarn prisma:migrate:dev
   ```
+  ![](./images/screenshot-1.png)
 
 - Prisma가 RDBMS에 해당 데이터 모델과 일치하는 테이블을 생성했습니다.
+![](./images/screenshot-2.png)
 
-- CLI 결과로 출력된 GraphQL Playground 링크로 들어가면, CRUD 쿼리/뮤테이션이 생성된 모습을 확인 할 수 있습니다.
+- CLI 결과로 출력된 엔드포인트 링크로 들어가면, CRUD 쿼리/뮤테이션이 생성된 모습을 확인 할 수 있습니다.
+![](./images/screenshot-3.png)
 
 - 또, CLI 결과로 출력된 Dashboard 링크로 들어가면, 데이터를 생성, 수정, 삭제 할 수 있는 대시보드를 확인 할 수 있습니다.
+  ![](./images/screenshot-4.png)
+
   - CLI에 다음 명령어를 입력하면 대시보드로 바로 이동 할 수 있습니다.
 
     ```bash
@@ -106,6 +111,106 @@ $ prisma deploy
 아까 만든 `task` schema를 Prisma Client를 사용해 구현해볼까요?
 
 #### `/src/schema/task/Query.ts`
+```typescript
+import { extendType, idArg } from 'nexus'
+import { prisma } from '~/generated/prisma'
+
+export const TaskQueries = extendType({
+  type: 'Query',
+  definition(t) {
+    t.field('task', {
+      type: 'Task',
+      args: {
+        id: idArg({
+          required: true,
+        }),
+      },
+      resolve: async (_parent, args) => {
+        const task = await prisma.task({
+          id: args.id,
+        })
+
+        if (task) {
+          return task
+
+        } else {
+          throw new Error(`${args.id}를 가진 Task를 찾을 수 없습니다`)
+        }
+      },
+    })
+
+    t.list.field('tasks', {
+      type: 'Task',
+      resolve: () => {
+        return prisma.tasks()
+      },
+    })
+  },
+})
+```
+
+#### `/src/schema/task/Mutation.ts`
+```typescript
+import { booleanArg, extendType, idArg, stringArg } from 'nexus'
+import { prisma } from '~/generated/prisma'
+
+export const TaskMutations = extendType({
+  type: 'Mutation',
+  definition(t) {
+    t.field('createTask', {
+      type: 'Task',
+      args: {
+        content: stringArg({
+          required: true,
+        }),
+      },
+      resolve: (_parent, args) => {
+        return prisma.createTask({
+          content: args.content,
+          isDone: false,
+        })
+      },
+    })
+
+    t.field('updateTask', {
+      type: 'Task',
+      args: {
+        id: idArg({
+          required: true,
+        }),
+        content: stringArg(),
+        isDone: booleanArg(),
+      },
+      resolve: (_parent, args) => {
+        return prisma.updateTask({
+          data: {
+            content: args.content,
+            isDone: args.isDone,
+          },
+          where: {
+            id: args.id,
+          },
+        })
+      },
+    })
+
+    t.field('deleteTask', {
+      type: 'Task',
+      args: {
+        id: idArg({
+          required: true,
+        }),
+      },
+      resolve: (_parent, args) => {
+        return prisma.deleteTask({
+          id: args.id,
+        })
+      },
+    })
+  },
+})
+```
+
 
 ## (4) Nexus Prisma 사용해, Prisma를 API에 연결하기
 
