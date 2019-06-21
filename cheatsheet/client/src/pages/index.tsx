@@ -8,7 +8,7 @@ import {
 } from '~/generated/graphql'
 
 export default function PageIndex() {
-  const [content, setContent] = useState()
+  const [content, setContent] = useState('')
 
   const { error, loading, data, refetch } = useGetTasksQuery()
   const createTask = useCreateTaskMutation()
@@ -16,6 +16,7 @@ export default function PageIndex() {
   const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setContent(event.target.value)
   }
+
   const onAddButtonClick = async () => {
     await createTask({
       variables: {
@@ -32,7 +33,7 @@ export default function PageIndex() {
     <div>
       <h1>📝 할 일 목록</h1>
       <div className='add'>
-        <input type='text' value={content} onChange={onInputChange}/>
+        <input type='text' value={content} onChange={onInputChange} />
         <button onClick={onAddButtonClick}>추가하기</button>
       </div>
       <Tasks

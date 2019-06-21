@@ -1,9 +1,17 @@
+import { useState } from 'react'
+
 export default function PageIndex() {
+  const [content, setContent] = useState('')
+
+  const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setContent(event.target.value)
+  }
+
   return (
     <div>
       <h1>📝 할 일 목록</h1>
       <div className='add'>
-        <input type='text' />
+        <input type='text' value={content} onChange={onInputChange} />
         <button>추가하기</button>
       </div>
       <Tasks />
