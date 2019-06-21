@@ -61,10 +61,10 @@ $ prisma deploy
   ```
 
 - 프로젝트 폴더로 내에 `.env.development` 파일과 `.env.production` 파일을 수정해줍니다.
-- 전에 배포한 Prisma의 엔드포인트를 넣어주세요.
-  - 엔드포인트 뒤에 서비스 이름은 알맞게 지어주시고, stage는 각각 `dev`와 `prod`를 적어주세요. (`http://엔드포인트/서비스/스테이지`)
-  - 예시: `http://prisma.ap-northeast-2.elb.amazonaws.com/serverless/dev`
-- 마찬가지로 Prisma의 `managementApiSecret`을 넣어줍니다.
+  - 전에 배포한 Prisma의 엔드포인트를 넣어주세요.
+    - 엔드포인트 뒤에 서비스 이름은 알맞게 지어주시고, stage는 각각 `dev`와 `prod`를 적어주세요. (`http://엔드포인트/서비스/스테이지`)
+    - 예시: `http://prisma.ap-northeast-2.elb.amazonaws.com/serverless/dev`
+  - 마찬가지로 Prisma의 `managementApiSecret`을 넣어줍니다.
 
   #### `.env.development`
   ```
