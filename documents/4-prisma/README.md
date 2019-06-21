@@ -102,7 +102,7 @@ $ prisma deploy
   ![](./images/screenshot-3.png)
 
 
-- CLI 결과로 출력된 엔드포인트 링크로 들어가서 하단의 `HTTP HEADERS`내에 해당 토큰을 삽입해주면, CRUD 쿼리/뮤테이션이 생성된 모습을 확인 할 수 있습니다.
+- CLI 결과로 출력된 엔드포인트를 웹브라우저에 입력하면, Prisma 내부의 GraphQL Playground를 확인 할 수 있습니다. GraphQL Playground 내 하단의 `HTTP HEADERS`내에 발급한 토큰을 삽입해주면, Prisma가 생성한 CRUD 쿼리/뮤테이션을 확인 할 수 있습니다.
 
   ```json
   {
