@@ -213,6 +213,12 @@ export const TaskMutations = extendType({
 
 
 ## (4) Nexus Prisma 사용해, Prisma를 API에 연결하기
+생각해보니, Task 타입과 CRUD GraphQL 쿼리/뮤테이션들을 Prisma가 이미 만들었었죠! Nexus Prisma를 사용해 자동으로 생성된 타입과 쿼리/뮤테이션을 그대로 이용해볼까요?
+
+#### `/src/app.ts`
+```
+
+```
 
 
 ## 학습 목표 확인하기

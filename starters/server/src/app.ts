@@ -1,9 +1,7 @@
 import { ApolloServer } from 'apollo-server-express'
 import cors from 'cors'
 import express from 'express'
-import {
-  makeSchema,
-} from 'nexus'
+import { makeSchema } from 'nexus'
 import path from 'path'
 
 import * as types from './schema'
