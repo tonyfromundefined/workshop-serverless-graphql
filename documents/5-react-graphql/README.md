@@ -1,4 +1,4 @@
-# 6. React.js에서 GraphQL API 사용하기
+# 5. React.js에서 GraphQL API 사용하기
 
 ### 본 챕터의 학습 목표는 아래와 같습니다. 👏
 - [ ] GraphQL Code Generator로 React 코드를 생성하여 사용해본다.
