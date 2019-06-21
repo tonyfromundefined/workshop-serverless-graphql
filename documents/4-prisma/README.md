@@ -260,7 +260,7 @@ $ prisma deploy
 
 
 ## (4) Nexus Prisma 사용해, Prisma를 API에 연결하기
-생각해보니, Task 타입과 CRUD GraphQL 쿼리/뮤테이션들을 Prisma가 이미 만들었었죠! Nexus Prisma를 사용해 자동으로 생성된 타입과 쿼리/뮤테이션을 그대로 이용해볼까요?
+생각해보니, `Task` 타입과 CRUD GraphQL 쿼리/뮤테이션들을 Prisma가 이미 만들었었죠! Nexus Prisma를 사용해 생성된 타입과 쿼리/뮤테이션을 그대로 이용해볼까요?
 
 - 기존에 설정된 Nexus의 `makeSchema`를 Nexus Prisma의 `makePrismaSchema`로 변경해줍니다.
 - `makePrismaSchema`에 Prisma Client와 `datamodelInfo`를 주입해줍니다.
@@ -311,7 +311,7 @@ $ prisma deploy
   ```
 
 - Nexus의 `objectType` 함수를 Nexus Prisma의 `prismaObjectType`으로 변경해줍니다.
-- `prismaObjectType`의 definition 내에 `prismaFields`를 사용 할 수 있게되며, 노출하고 싶은 Prisma 내 속성들을 나열 할 수 있습니다.
+- `prismaObjectType`의 definition 내에 `t.prismaFields`를 사용 할 수 있게되며, Prisma가 생성한 타입 내 속성들을 노출 할 수 있습니다.
 
   #### `/src/schema/task/index.ts`
   ```typescript
@@ -331,7 +331,7 @@ $ prisma deploy
   export * from './Mutation'
   ```
 
-- `task`와 `tasks` 쿼리를 노출해줍니다.
+- `task`와 `tasks` 쿼리를 연결해줍니다.
   #### `/src/schema/task/Query.ts`
   ```typescript
   import { prismaExtendType } from 'nexus-prisma'
@@ -344,7 +344,7 @@ $ prisma deploy
   })
   ```
 
-- `createTask`, `updateTask`, `deleteTask` 뮤테이션을 노출해줍니다.
+- `createTask`, `updateTask`, `deleteTask` 뮤테이션을 연결해줍니다.
 
   #### `/src/schema/task/Mutation.ts`
   ```typescript
@@ -362,7 +362,7 @@ $ prisma deploy
   })
   ```
 
-다음과 같이 기본적인 CRUD를 Prisma를 이용해 쉽게 만들어붙일 수 있습니다. 또한, Nexus 내부에서 TypeScript 타이핑을 지원해 혹시라도 실수할 염려가 없습니다.
+다음과 같이 기본적인 CRUD를 Prisma를 이용해 쉽게 만들어 붙일 수 있습니다. 또한, Nexus 내부에서 TypeScript 타이핑을 통해 간혹 발생 할 수 있는 실수를 줄여줍니다.
 
 자 이제 API를 완성했으니, 웹 클라이언트에서 GraphQL을 어떻게 사용 할 수 있는지 알아볼까요?
 
