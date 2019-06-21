@@ -19,9 +19,7 @@
     "prisma:migrate:dev": "prisma deploy -e .env.development",
     "prisma:migrate:prod": "prisma deploy -e .env.production",
     "prisma:admin:dev": "prisma admin -e .env.development",
-    "prisma:admin:prod": "prisma admin -e .env.production",
-    "prisma:delete:dev": "prisma delete -e .env.development",
-    "prisma:delete:prod": "prisma delete -e .env.production"
+    "prisma:admin:prod": "prisma admin -e .env.production"
   },
   "dependencies": {
     "apollo-server-express": "^2.6.3",
