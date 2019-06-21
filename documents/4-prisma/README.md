@@ -110,131 +110,135 @@ $ prisma deploy
 ## (3) Prisma Client 사용해보기
 아까 만든 `task` schema를 Prisma Client를 사용해 구현해볼까요?
 
-#### `/src/schema/task/Query.ts`
-```typescript
-import { extendType, idArg } from 'nexus'
-import { prisma } from '~/generated/prisma'
+- 리졸버 내 기존 목업 DB를 삭제하고 Prisma Client를 이용해 데이터를 가져와서 `return` 합니다.
 
-export const TaskQueries = extendType({
-  type: 'Query',
-  definition(t) {
-    t.field('task', {
-      type: 'Task',
-      args: {
-        id: idArg({
-          required: true,
-        }),
-      },
-      resolve: async (_parent, args) => {
-        const task = await prisma.task({
-          id: args.id,
-        })
+  #### `/src/schema/task/Query.ts`
+  ```typescript
+  import { extendType, idArg } from 'nexus'
+  import { prisma } from '~/generated/prisma'
 
-        if (task) {
-          return task
-
-        } else {
-          throw new Error(`${args.id}를 가진 Task를 찾을 수 없습니다`)
-        }
-      },
-    })
-
-    t.list.field('tasks', {
-      type: 'Task',
-      resolve: () => {
-        return prisma.tasks()
-      },
-    })
-  },
-})
-```
-
-#### `/src/schema/task/Mutation.ts`
-```typescript
-import { booleanArg, extendType, idArg, stringArg } from 'nexus'
-import { prisma } from '~/generated/prisma'
-
-export const TaskMutations = extendType({
-  type: 'Mutation',
-  definition(t) {
-    t.field('createTask', {
-      type: 'Task',
-      args: {
-        content: stringArg({
-          required: true,
-        }),
-      },
-      resolve: (_parent, args) => {
-        return prisma.createTask({
-          content: args.content,
-          isDone: false,
-        })
-      },
-    })
-
-    t.field('updateTask', {
-      type: 'Task',
-      args: {
-        id: idArg({
-          required: true,
-        }),
-        content: stringArg(),
-        isDone: booleanArg(),
-      },
-      resolve: (_parent, args) => {
-        return prisma.updateTask({
-          data: {
-            content: args.content,
-            isDone: args.isDone,
-          },
-          where: {
+  export const TaskQueries = extendType({
+    type: 'Query',
+    definition(t) {
+      t.field('task', {
+        type: 'Task',
+        args: {
+          id: idArg({
+            required: true,
+          }),
+        },
+        resolve: async (_parent, args) => {
+          const task = await prisma.task({
             id: args.id,
-          },
-        })
-      },
-    })
+          })
 
-    t.field('deleteTask', {
-      type: 'Task',
-      args: {
-        id: idArg({
-          required: true,
-        }),
-      },
-      resolve: (_parent, args) => {
-        return prisma.deleteTask({
-          id: args.id,
-        })
-      },
-    })
-  },
-})
-```
+          if (task) {
+            return task
 
-기존에 생성해줬던 목업 DB를 삭제합니다.
+          } else {
+            throw new Error(`${args.id}를 가진 Task를 찾을 수 없습니다`)
+          }
+        },
+      })
 
-#### `/src/schema/task/index.ts`
-```typescript
-import { objectType } from 'nexus'
+      t.list.field('tasks', {
+        type: 'Task',
+        resolve: () => {
+          return prisma.tasks()
+        },
+      })
+    },
+  })
+  ```
 
-export const Task = objectType({
-  name: 'Task',
-  definition(t) {
-    t.id('id', {
-      description: 'Task 생성 시 자동 생성되는 Unique ID',
-    })
-    t.string('content', {
-      description: 'Task 내용',
-    })
-    t.boolean('isDone', {
-      description: 'Task 완료 여부',
-    })
-  },
-})
+- 마찬가지로 `createTask`, `updateTask`, `deleteTask` 내에서도 기존 목업 DB 조작 로직을 삭제하고 Prisma Client를 이용해 데이터를 수정해 `return` 합니다.
 
-export * from './Query'
-export * from './Mutation'
-```
+  #### `/src/schema/task/Mutation.ts`
+  ```typescript
+  import { booleanArg, extendType, idArg, stringArg } from 'nexus'
+  import { prisma } from '~/generated/prisma'
+
+  export const TaskMutations = extendType({
+    type: 'Mutation',
+    definition(t) {
+      t.field('createTask', {
+        type: 'Task',
+        args: {
+          content: stringArg({
+            required: true,
+          }),
+        },
+        resolve: (_parent, args) => {
+          return prisma.createTask({
+            content: args.content,
+            isDone: false,
+          })
+        },
+      })
+
+      t.field('updateTask', {
+        type: 'Task',
+        args: {
+          id: idArg({
+            required: true,
+          }),
+          content: stringArg(),
+          isDone: booleanArg(),
+        },
+        resolve: (_parent, args) => {
+          return prisma.updateTask({
+            data: {
+              content: args.content,
+              isDone: args.isDone,
+            },
+            where: {
+              id: args.id,
+            },
+          })
+        },
+      })
+
+      t.field('deleteTask', {
+        type: 'Task',
+        args: {
+          id: idArg({
+            required: true,
+          }),
+        },
+        resolve: (_parent, args) => {
+          return prisma.deleteTask({
+            id: args.id,
+          })
+        },
+      })
+    },
+  })
+  ```
+
+- 기존에 생성해줬던 목업 DB를 삭제합니다.
+
+  #### `/src/schema/task/index.ts`
+  ```typescript
+  import { objectType } from 'nexus'
+
+  export const Task = objectType({
+    name: 'Task',
+    definition(t) {
+      t.id('id', {
+        description: 'Task 생성 시 자동 생성되는 Unique ID',
+      })
+      t.string('content', {
+        description: 'Task 내용',
+      })
+      t.boolean('isDone', {
+        description: 'Task 완료 여부',
+      })
+    },
+  })
+
+  export * from './Query'
+  export * from './Mutation'
+  ```
 
 
 ## (4) Nexus Prisma 사용해, Prisma를 API에 연결하기
