@@ -1,4 +1,11 @@
 # 서버리스 GraphQL 워크샵 🍯
+서버리스 GraphQL 워크샵에 오신 여러분을 환영합니다!
+
+이 워크숍은 기존에 GraphQL에 대한 배경이 없는 분들을 위해 준비되었습니다. GraphQL 백엔드에 대한 가장 기초적인 핵심 개념을 담았으며, 실제 Production에서 사용되는 도구들을 소개하며 Production 레벨에서의 GraphQL이 가진 핵심 가치가 무엇인지 배우고, 따라 할 수 있는 시간을 가집니다.
+
+> 본 워크샵은 AWSKRUG 서버리스 모임이 주최합니다.
+>
+> 🖋 Written with 🔥 by [Tony](https://github.com/tonyfromundefined)
 
 ## 이런 기술 스택이 사용되었어요 🧐
 
@@ -25,6 +32,7 @@
 
 ### Database
 - [MySQL](https://www.mysql.com/)
+- [AWS Aurora Serverless](https://aws.amazon.com/ko/rds/aurora/serverless/)
 - [AWS RDS](https://aws.amazon.com/ko/rds/)
 
 ### Web Client
