@@ -118,11 +118,11 @@ $ prisma deploy
 - 올바른 토큰임이 확인되면, 데이터를 생성, 수정, 삭제 할 수 있습니다.
 ![](./images/screenshot-7.png)
 
-  - CLI에 다음 명령어를 입력하면 토큰 입력 과정 없이 Prisma Admin을 바로 사용 할 수 있습니다.
-
-    ```bash
-    $ yarn prisma:admin:dev
-    ```
+  > CLI에 다음 명령어를 입력하면 토큰 입력 과정 없이 Prisma Admin을 바로 사용 할 수 있습니다.
+  >
+  >  ```bash
+  >  $ yarn prisma:admin:dev
+  >  ```
 
 
 ## (3) Prisma Client 사용해보기
