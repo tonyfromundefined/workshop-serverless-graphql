@@ -45,7 +45,7 @@ type Task {
 }
 ```
 
-#### Bash
+#### CLI
 ```bash
 $ prisma deploy
 ```
