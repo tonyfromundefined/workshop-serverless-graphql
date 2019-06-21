@@ -1,5 +1,5 @@
 import { extendType, idArg } from 'nexus'
-import { TASKS } from './'
+import { prisma } from '~/generated/prisma'
 
 export const TaskQueries = extendType({
   type: 'Query',
@@ -7,10 +7,14 @@ export const TaskQueries = extendType({
     t.field('task', {
       type: 'Task',
       args: {
-        id: idArg(),
+        id: idArg({
+          required: true,
+        }),
       },
-      resolve: (_parent, args) => {
-        const task = TASKS.find((task) => task.id === args.id)
+      resolve: async (_parent, args) => {
+        const task = await prisma.task({
+          id: args.id,
+        })
 
         if (task) {
           return task
@@ -24,7 +28,7 @@ export const TaskQueries = extendType({
     t.list.field('tasks', {
       type: 'Task',
       resolve: () => {
-        return TASKS
+        return prisma.tasks()
       },
     })
   },

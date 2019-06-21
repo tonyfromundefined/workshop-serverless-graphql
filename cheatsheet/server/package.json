@@ -8,13 +8,18 @@
   "private": false,
   "scripts": {
     "predev": "rimraf ./dist",
-    "dev": "webpack --config webpack.config.dev.js --info-verbosity none",
+    "dev": "dotenv -e ./.env.development -- webpack --config webpack.config.dev.js",
     "prebuild": "rimraf ./dist",
     "build": "webpack --config webpack.config.prod.js",
+    "start": "dotenv -e ./.env.production -- node ./dist/server.js",
     "deploy:dev": "sls deploy --stage dev",
     "deploy:prod": "NODE_ENV=production sls deploy --stage prod",
     "undeploy:dev": "sls remove --stage dev",
-    "undeploy:prod": "sls remove --stage prod"
+    "undeploy:prod": "sls remove --stage prod",
+    "prisma:migrate:dev": "prisma deploy -e .env.development",
+    "prisma:migrate:prod": "prisma deploy -e .env.production",
+    "prisma:admin:dev": "prisma admin -e .env.development",
+    "prisma:admin:prod": "prisma admin -e .env.production"
   },
   "dependencies": {
     "apollo-server-express": "^2.6.3",
@@ -24,7 +29,6 @@
     "dotenv": "^8.0.0",
     "encoding": "^0.1.12",
     "express": "^4.17.1",
-    "graphql": "^14.3.1",
     "nexus": "^0.12.0-beta.6",
     "prisma-client-lib": "^1.34.0",
     "short-uuid": "^3.1.1",
@@ -34,7 +38,9 @@
     "@types/aws-serverless-express": "^3.3.1",
     "@types/dotenv": "^6.1.1",
     "@types/graphql": "^14.2.1",
+    "dotenv-cli": "^2.0.0",
     "fork-ts-checker-webpack-plugin": "^1.3.7",
+    "nexus-prisma-generate": "^0.3.7",
     "nodemon-webpack-plugin": "^4.0.8",
     "rimraf": "^2.6.3",
     "serverless": "^1.45.1",
@@ -46,5 +52,8 @@
     "webpack": "^4.34.0",
     "webpack-cli": "^3.3.4",
     "webpackbar": "^3.2.0"
+  },
+  "resolutions": {
+    "nexus-prisma-generate/**/graphql": "0.13.2"
   }
 }
