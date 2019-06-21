@@ -7,7 +7,7 @@
     "exclude": [
       "node_modules/**/*.ts",
       "dist/**/*.js",
-      "src/generated/typegen.ts"
+      "src/generated/**/*.ts"
     ]
   },
   "rules": {

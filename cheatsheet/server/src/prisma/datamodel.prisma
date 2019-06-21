@@ -1,5 +1,0 @@
-type Task {
-  id: ID! @id
-  content: String!
-  isDone: Boolean!
-}

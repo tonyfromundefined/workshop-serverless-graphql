@@ -30,7 +30,7 @@ const server = new ApolloServer({
     types,
     outputs: {
       schema: path.resolve('./src/generated', 'schema.graphql'),
-      typegen: path.resolve('./src/generated', 'typegen.ts'),
+      typegen: path.resolve('./src/generated', 'nexus.ts'),
     },
   }),
   introspection: isPlaygroundEnabled,
