@@ -211,15 +211,138 @@ export const TaskMutations = extendType({
 })
 ```
 
+기존에 생성해줬던 목업 DB를 삭제합니다.
+
+#### `/src/schema/task/index.ts`
+```typescript
+import { objectType } from 'nexus'
+
+export const Task = objectType({
+  name: 'Task',
+  definition(t) {
+    t.id('id', {
+      description: 'Task 생성 시 자동 생성되는 Unique ID',
+    })
+    t.string('content', {
+      description: 'Task 내용',
+    })
+    t.boolean('isDone', {
+      description: 'Task 완료 여부',
+    })
+  },
+})
+
+export * from './Query'
+export * from './Mutation'
+```
+
 
 ## (4) Nexus Prisma 사용해, Prisma를 API에 연결하기
 생각해보니, Task 타입과 CRUD GraphQL 쿼리/뮤테이션들을 Prisma가 이미 만들었었죠! Nexus Prisma를 사용해 자동으로 생성된 타입과 쿼리/뮤테이션을 그대로 이용해볼까요?
 
-#### `/src/app.ts`
-```
+- 기존에 설정된 Nexus의 `makeSchema`를 Nexus Prisma의 `makePrismaSchema`로 변경해줍니다.
+- `makePrismaSchema`에 Prisma Client와 `datamodelInfo`를 주입해줍니다.
 
-```
+  #### `/src/app.ts`
+  ```typescript
+  import { ApolloServer } from 'apollo-server-express'
+  import cors from 'cors'
+  import express from 'express'
+  import { makePrismaSchema } from 'nexus-prisma'
+  import path from 'path'
+  import datamodelInfo from './generated/nexus-prisma'
+  import { prisma } from './generated/prisma'
 
+  import * as types from './schema'
+
+  const isPlaygroundEnabled = !!Number(process.env.IS_PLAYGROUND_ENABLED || '0')
+
+  const app = express()
+
+  app.use(cors())
+
+  app.get('/', (_req, res) => {
+    return res.json('ok')
+  })
+
+  const server = new ApolloServer({
+    schema: makePrismaSchema({
+      types,
+      prisma: {
+        client: prisma,
+        datamodelInfo,
+      },
+      outputs: {
+        schema: path.resolve('./src/generated', 'schema.graphql'),
+        typegen: path.resolve('./src/generated', 'nexus.ts'),
+      },
+    }),
+    introspection: isPlaygroundEnabled,
+    playground: isPlaygroundEnabled,
+  })
+
+  server.applyMiddleware({
+    app,
+  })
+
+  export default app
+  ```
+
+- Nexus의 `objectType` 함수를 Nexus Prisma의 `prismaObjectType`으로 변경해줍니다.
+- `prismaObjectType`의 definition 내에 `prismaFields`를 사용 할 수 있게되며, 노출하고 싶은 Prisma 내 속성들을 나열 할 수 있습니다.
+
+  #### `/src/schema/task/index.ts`
+  ```typescript
+  import { prismaObjectType } from 'nexus-prisma'
+
+  export const Task = prismaObjectType({
+    name: 'Task',
+    definition(t) {
+      t.prismaFields(['*'])
+
+      // 또는 다음과 같이 원하는 필드만 노출 할 수 있습니다.
+      // t.prismaFields(['content', 'isDone'])
+    },
+  })
+
+  export * from './Query'
+  export * from './Mutation'
+  ```
+
+- `task`와 `tasks` 쿼리를 노출해줍니다.
+  #### `/src/schema/task/Query.ts`
+  ```typescript
+  import { prismaExtendType } from 'nexus-prisma'
+
+  export const TaskQueries = prismaExtendType({
+    type: 'Query',
+    definition(t) {
+      t.prismaFields(['task', 'tasks'])
+    },
+  })
+  ```
+
+- `createTask`, `updateTask`, `deleteTask` 뮤테이션을 노출해줍니다.
+
+  #### `/src/schema/task/Mutation.ts`
+  ```typescript
+  import { prismaExtendType } from 'nexus-prisma'
+
+  export const TaskMutations = prismaExtendType({
+    type: 'Mutation',
+    definition(t) {
+      t.prismaFields([
+        'createTask',
+        'updateTask',
+        'deleteTask',
+      ])
+    },
+  })
+  ```
+
+다음과 같이 기본적인 CRUD를 Prisma를 이용해 쉽게 만들어붙일 수 있습니다. 또한, Nexus 내부에서 TypeScript 타이핑을 지원해 혹시라도 실수할 염려가 없습니다.
+
+자 이제 API를 완성했으니, 웹 클라이언트에서 GraphQL을 어떻게 사용 할 수 있는지 알아볼까요?
 
 ## 학습 목표 확인하기
 - [x] Prisma에 대해 이해한다

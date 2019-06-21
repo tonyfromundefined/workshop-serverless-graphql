@@ -1,25 +1,12 @@
-import { objectType } from 'nexus'
+import { prismaObjectType } from 'nexus-prisma'
 
-interface ITask {
-  id: string
-  content: string
-  isDone: boolean
-}
-
-export const TASKS: ITask[] = []
-
-export const Task = objectType({
+export const Task = prismaObjectType({
   name: 'Task',
   definition(t) {
-    t.id('id', {
-      description: 'Task 생성 시 자동 생성되는 Unique ID',
-    })
-    t.string('content', {
-      description: 'Task 내용',
-    })
-    t.boolean('isDone', {
-      description: 'Task 완료 여부',
-    })
+    t.prismaFields(['*'])
+
+    // 또는 다음과 같이 원하는 필드만 노출 할 수 있습니다.
+    // t.prismaFields(['content', 'isDone'])
   },
 })
 

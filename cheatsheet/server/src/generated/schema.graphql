@@ -3,25 +3,84 @@
 
 
 type Mutation {
-  createTask(content: String!): Task!
-  deleteTask(id: ID!): Task!
+  createTask(data: TaskCreateInput!): Task!
+  deleteTask(where: TaskWhereUniqueInput!): Task
   ping: String!
-  updateTask(content: String, id: ID!, isDone: Boolean): Task!
+  updateTask(data: TaskUpdateInput!, where: TaskWhereUniqueInput!): Task
 }
 
 type Query {
   stage: String!
-  task(id: ID!): Task!
-  tasks: [Task!]!
+  task(where: TaskWhereUniqueInput!): Task
+  tasks(after: String, before: String, first: Int, last: Int, orderBy: TaskOrderByInput, skip: Int, where: TaskWhereInput): [Task!]!
 }
 
 type Task {
-  """Task 내용"""
   content: String!
-
-  """Task 생성 시 자동 생성되는 Unique ID"""
   id: ID!
-
-  """Task 완료 여부"""
   isDone: Boolean!
+}
+
+input TaskCreateInput {
+  content: String!
+  id: ID
+  isDone: Boolean!
+}
+
+enum TaskOrderByInput {
+  content_ASC
+  content_DESC
+  createdAt_ASC
+  createdAt_DESC
+  id_ASC
+  id_DESC
+  isDone_ASC
+  isDone_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+input TaskUpdateInput {
+  content: String
+  isDone: Boolean
+}
+
+input TaskWhereInput {
+  AND: [TaskWhereInput!]
+  content: String
+  content_contains: String
+  content_ends_with: String
+  content_gt: String
+  content_gte: String
+  content_in: [String!]
+  content_lt: String
+  content_lte: String
+  content_not: String
+  content_not_contains: String
+  content_not_ends_with: String
+  content_not_in: [String!]
+  content_not_starts_with: String
+  content_starts_with: String
+  id: ID
+  id_contains: ID
+  id_ends_with: ID
+  id_gt: ID
+  id_gte: ID
+  id_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_not: ID
+  id_not_contains: ID
+  id_not_ends_with: ID
+  id_not_in: [ID!]
+  id_not_starts_with: ID
+  id_starts_with: ID
+  isDone: Boolean
+  isDone_not: Boolean
+  NOT: [TaskWhereInput!]
+  OR: [TaskWhereInput!]
+}
+
+input TaskWhereUniqueInput {
+  id: ID
 }

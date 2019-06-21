@@ -13,9 +13,57 @@ declare global {
 }
 
 export interface NexusGenInputs {
+  TaskCreateInput: { // input type
+    content: string; // String!
+    id?: string | null; // ID
+    isDone: boolean; // Boolean!
+  }
+  TaskUpdateInput: { // input type
+    content?: string | null; // String
+    isDone?: boolean | null; // Boolean
+  }
+  TaskWhereInput: { // input type
+    AND?: NexusGenInputs['TaskWhereInput'][] | null; // [TaskWhereInput!]
+    content?: string | null; // String
+    content_contains?: string | null; // String
+    content_ends_with?: string | null; // String
+    content_gt?: string | null; // String
+    content_gte?: string | null; // String
+    content_in?: string[] | null; // [String!]
+    content_lt?: string | null; // String
+    content_lte?: string | null; // String
+    content_not?: string | null; // String
+    content_not_contains?: string | null; // String
+    content_not_ends_with?: string | null; // String
+    content_not_in?: string[] | null; // [String!]
+    content_not_starts_with?: string | null; // String
+    content_starts_with?: string | null; // String
+    id?: string | null; // ID
+    id_contains?: string | null; // ID
+    id_ends_with?: string | null; // ID
+    id_gt?: string | null; // ID
+    id_gte?: string | null; // ID
+    id_in?: string[] | null; // [ID!]
+    id_lt?: string | null; // ID
+    id_lte?: string | null; // ID
+    id_not?: string | null; // ID
+    id_not_contains?: string | null; // ID
+    id_not_ends_with?: string | null; // ID
+    id_not_in?: string[] | null; // [ID!]
+    id_not_starts_with?: string | null; // ID
+    id_starts_with?: string | null; // ID
+    isDone?: boolean | null; // Boolean
+    isDone_not?: boolean | null; // Boolean
+    NOT?: NexusGenInputs['TaskWhereInput'][] | null; // [TaskWhereInput!]
+    OR?: NexusGenInputs['TaskWhereInput'][] | null; // [TaskWhereInput!]
+  }
+  TaskWhereUniqueInput: { // input type
+    id?: string | null; // ID
+  }
 }
 
 export interface NexusGenEnums {
+  TaskOrderByInput: "content_ASC" | "content_DESC" | "createdAt_ASC" | "createdAt_DESC" | "id_ASC" | "id_DESC" | "isDone_ASC" | "isDone_DESC" | "updatedAt_ASC" | "updatedAt_DESC"
 }
 
 export interface NexusGenRootTypes {
@@ -34,18 +82,23 @@ export interface NexusGenRootTypes {
 }
 
 export interface NexusGenAllTypes extends NexusGenRootTypes {
+  TaskCreateInput: NexusGenInputs['TaskCreateInput'];
+  TaskUpdateInput: NexusGenInputs['TaskUpdateInput'];
+  TaskWhereInput: NexusGenInputs['TaskWhereInput'];
+  TaskWhereUniqueInput: NexusGenInputs['TaskWhereUniqueInput'];
+  TaskOrderByInput: NexusGenEnums['TaskOrderByInput'];
 }
 
 export interface NexusGenFieldTypes {
   Mutation: { // field return type
     createTask: NexusGenRootTypes['Task']; // Task!
-    deleteTask: NexusGenRootTypes['Task']; // Task!
+    deleteTask: NexusGenRootTypes['Task'] | null; // Task
     ping: string; // String!
-    updateTask: NexusGenRootTypes['Task']; // Task!
+    updateTask: NexusGenRootTypes['Task'] | null; // Task
   }
   Query: { // field return type
     stage: string; // String!
-    task: NexusGenRootTypes['Task']; // Task!
+    task: NexusGenRootTypes['Task'] | null; // Task
     tasks: NexusGenRootTypes['Task'][]; // [Task!]!
   }
   Task: { // field return type
@@ -58,20 +111,28 @@ export interface NexusGenFieldTypes {
 export interface NexusGenArgTypes {
   Mutation: {
     createTask: { // args
-      content: string; // String!
+      data: NexusGenInputs['TaskCreateInput']; // TaskCreateInput!
     }
     deleteTask: { // args
-      id: string; // ID!
+      where: NexusGenInputs['TaskWhereUniqueInput']; // TaskWhereUniqueInput!
     }
     updateTask: { // args
-      content?: string | null; // String
-      id: string; // ID!
-      isDone?: boolean | null; // Boolean
+      data: NexusGenInputs['TaskUpdateInput']; // TaskUpdateInput!
+      where: NexusGenInputs['TaskWhereUniqueInput']; // TaskWhereUniqueInput!
     }
   }
   Query: {
     task: { // args
-      id: string; // ID!
+      where: NexusGenInputs['TaskWhereUniqueInput']; // TaskWhereUniqueInput!
+    }
+    tasks: { // args
+      after?: string | null; // String
+      before?: string | null; // String
+      first?: number | null; // Int
+      last?: number | null; // Int
+      orderBy?: NexusGenEnums['TaskOrderByInput'] | null; // TaskOrderByInput
+      skip?: number | null; // Int
+      where?: NexusGenInputs['TaskWhereInput'] | null; // TaskWhereInput
     }
   }
 }
@@ -83,9 +144,9 @@ export interface NexusGenInheritedFields {}
 
 export type NexusGenObjectNames = "Mutation" | "Query" | "Task";
 
-export type NexusGenInputNames = never;
+export type NexusGenInputNames = "TaskCreateInput" | "TaskUpdateInput" | "TaskWhereInput" | "TaskWhereUniqueInput";
 
-export type NexusGenEnumNames = never;
+export type NexusGenEnumNames = "TaskOrderByInput";
 
 export type NexusGenInterfaceNames = never;
 

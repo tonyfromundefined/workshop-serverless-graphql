@@ -1,8 +1,10 @@
 import { ApolloServer } from 'apollo-server-express'
 import cors from 'cors'
 import express from 'express'
-import { makeSchema } from 'nexus'
+import { makePrismaSchema } from 'nexus-prisma'
 import path from 'path'
+import datamodelInfo from './generated/nexus-prisma'
+import { prisma } from './generated/prisma'
 
 import * as types from './schema'
 
@@ -17,8 +19,12 @@ app.get('/', (_req, res) => {
 })
 
 const server = new ApolloServer({
-  schema: makeSchema({
+  schema: makePrismaSchema({
     types,
+    prisma: {
+      client: prisma,
+      datamodelInfo,
+    },
     outputs: {
       schema: path.resolve('./src/generated', 'schema.graphql'),
       typegen: path.resolve('./src/generated', 'nexus.ts'),
