@@ -60,74 +60,52 @@ $ prisma deploy
   $ npm i -g prisma
   ```
 
-- 프로젝트 폴더로 이동해, `/src/prisma` 폴더를 생성합니다.
+- 프로젝트 폴더로 내에 `.env.development` 파일과 `.env.production` 파일을 수정해줍니다.
+- 전에 배포한 Prisma의 엔드포인트를 넣어주세요.
+  - 엔드포인트 뒤에 서비스 이름은 알맞게 지어주시고, stage는 각각 `dev`와 `prod`를 적어주세요. (`http://엔드포인트/서비스/스테이지`)
+  - 예시: `http://prisma.ap-northeast-2.elb.amazonaws.com/serverless/dev`
+- 마찬가지로 Prisma의 `managementApiSecret`을 넣어줍니다.
 
-  ```bash
-  $ cd ./starters/server/src
-  $ mkdir prisma
-  $ cd prisma
+  #### `.env.development`
+  ```
+  STAGE="development"
+  IS_PLAYGROUND_ENABLED="1"
+
+  PRISMA_ENDPOINT="http://prisma.ap-northeast-2.elb.amazonaws.com/serverless/dev"
+  PRISMA_MANAGEMENT_API_SECRET="serverless"
   ```
 
-- Prisma CLI를 이용해 prisma 설정을 초기화합니다.
-
-  ```bash
-  $ prisma init
+  #### `.env.production`
   ```
+  STAGE="production"
+  IS_PLAYGROUND_ENABLED="0"
 
-- `Use other server`를 선택합니다.
-![](./images/screenshot-1.png)
-
-- AWS에 배포된 Prisma의 엔드포인트를 넣어줍니다.
-![](./images/screenshot-2.png)
-
-- CloudFormation에 배포 할 때 입력했던 `managementApiSecret`을 입력해줍니다. (입력한 내용이 숨겨집니다)
-![](./images/screenshot-3.png)
-
-- 서비스 이름에 내가 원하는 서비스 이름을 자유롭게 입력해줍니다.
-![](./images/screenshot-4.png)
-
-- stage에 `dev`를 입력해줍니다.
-![](./images/screenshot-5.png)
-
-- `Prisma TypeScript Client`를 선택해줍니다.
-![](./images/screenshot-6.png)
-
-- `/src/prisma` 내에
-  - `datamodel.prisma`
-  - `prisma.yml`
-
-  파일이 생성된 모습을 확인하실 수 있습니다.
-
-- `datamodel.prisma` 파일을 다음과 같이 수정합니다.
-
-  #### `datamodel.prisma`
-  ```graphql
-  type Task {
-    id: ID! @id
-    content: String!
-    isDone: Boolean!
-  }
+  PRISMA_ENDPOINT="http://prisma.ap-northeast-2.elb.amazonaws.com/serverless/prod"
+  PRISMA_MANAGEMENT_API_SECRET="serverless"
   ```
 
 - CLI에서 다음과 같이 입력합니다.
 
   ```bash
-  prisma deploy
+  yarn prisma:migrate:dev
   ```
 
 - Prisma가 RDBMS에 해당 데이터 모델과 일치하는 테이블을 생성했습니다.
-![](./images/screenshot-7.png)
 
 - CLI 결과로 출력된 GraphQL Playground 링크로 들어가면, CRUD 쿼리/뮤테이션이 생성된 모습을 확인 할 수 있습니다.
-![](./images/screenshot-8.png)
 
 - 또, CLI 결과로 출력된 Dashboard 링크로 들어가면, 데이터를 생성, 수정, 삭제 할 수 있는 대시보드를 확인 할 수 있습니다.
-![](./images/screenshot-9.png)
+  - CLI에 다음 명령어를 입력하면 대시보드로 바로 이동 할 수 있습니다.
 
+    ```bash
+    $ yarn prisma:admin:dev
+    ```
 
 
 ## (3) Prisma Client 사용해보기
+아까 만든 `task` schema를 Prisma Client를 사용해 구현해볼까요?
 
+#### `/src/schema/task/Query.ts`
 
 ## (4) Nexus Prisma 사용해, Prisma를 API에 연결하기
 

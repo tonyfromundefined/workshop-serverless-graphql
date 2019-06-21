@@ -19,7 +19,9 @@
     "prisma:migrate:dev": "prisma deploy -e .env.development",
     "prisma:migrate:prod": "prisma deploy -e .env.production",
     "prisma:admin:dev": "prisma admin -e .env.development",
-    "prisma:admin:prod": "prisma admin -e .env.production"
+    "prisma:admin:prod": "prisma admin -e .env.production",
+    "prisma:delete:dev": "prisma delete -e .env.development",
+    "prisma:delete:prod": "prisma delete -e .env.production"
   },
   "dependencies": {
     "apollo-server-express": "^2.6.3",
@@ -30,6 +32,7 @@
     "encoding": "^0.1.12",
     "express": "^4.17.1",
     "nexus": "^0.12.0-beta.6",
+    "nexus-prisma": "^0.3.7",
     "prisma-client-lib": "^1.34.0",
     "short-uuid": "^3.1.1",
     "utf-8-validate": "^5.0.2"
@@ -48,7 +51,7 @@
     "serverless-dotenv-plugin": "^2.1.1",
     "ts-loader": "^6.0.2",
     "tslint": "^5.17.0",
-    "typescript": "^3.5.2",
+    "typescript": "3.4",
     "webpack": "^4.34.0",
     "webpack-cli": "^3.3.4",
     "webpackbar": "^3.2.0"

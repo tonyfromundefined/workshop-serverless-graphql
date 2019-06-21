@@ -323,6 +323,9 @@ GraphQL에 대해 이해하셨나요? 앞서 말씀드린 *Code-First* 개발 �
     ```
     STAGE = "development"
     IS_PLAYGROUND_ENABLED = "1"
+
+    PRISMA_ENDPOINT="{endpoint}/{service}/{stage}"
+    PRISMA_MANAGEMENT_API_SECRET="{managementApiSecret}"
     ```
   
   - `.env.production`
@@ -330,6 +333,9 @@ GraphQL에 대해 이해하셨나요? 앞서 말씀드린 *Code-First* 개발 �
     ```
     STAGE = "production"
     IS_PLAYGROUND_ENABLED = "0"
+
+    PRISMA_ENDPOINT="{endpoint}/{service}/{stage}"
+    PRISMA_MANAGEMENT_API_SECRET="{managementApiSecret}"
     ```
 
   > 두 파일을 통해 각 스테이지에서 환경 변수를 설정 할 수 있습니다.
