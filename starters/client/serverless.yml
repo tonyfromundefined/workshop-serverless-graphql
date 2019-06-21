@@ -1,0 +1,128 @@
+service: next-starter  # 1. Edit service name
+
+plugins:
+  - serverless-s3-sync
+  - serverless-apigw-binary
+  - serverless-dotenv-plugin
+
+package:
+  individually: true
+  excludeDevDependencies: false
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  stage: ${opt:stage, 'dev'}
+  region: us-east-1  # 2. Edit AWS region name
+
+custom:
+  #######################################
+  # Unique ID included in resource names.
+  # Replace it with a random value for every first distribution.
+  # https://www.random.org/strings/?num=1&len=6&digits=on&loweralpha=on&unique=on&format=html&rnd=new
+  stackId: '0uelbz'  # 3. Update Random Stack ID
+  #######################################
+
+  buckets:
+    ASSETS_BUCKET_NAME: ${self:service}-${self:custom.stackId}-${self:provider.stage}-assets
+  s3Sync:
+    - bucketName: ${self:custom.buckets.ASSETS_BUCKET_NAME}
+      localDir: dist
+  apigwBinary:
+    types:
+      - '*/*'
+
+functions:
+  main:
+    name: ${self:service}-${self:custom.stackId}-${self:provider.stage}-main
+    handler: dist/serverless/bundles/main.handler
+    memorySize: 2048
+    timeout: 10
+    environment:
+      NODE_ENV: production
+    package:
+      include:
+        - dist/serverless/bundles/main.js
+      exclude:
+        - '**'
+    events:
+      - http:
+          path: /
+          method: any
+      - http:
+          path: /{proxy+}
+          method: any
+      - http:
+          path: /_next/{proxy+}
+          method: any
+          integration: http-proxy
+          request:
+            uri: https://${self:custom.buckets.ASSETS_BUCKET_NAME}.s3.${self:provider.region}.amazonaws.com/{proxy}
+            parameters:
+              paths:
+                proxy: true
+
+  # 4. If you implement more than 1 entry, add entries.
+  # hello:
+  #   name: ${self:service}-${self:custom.stackId}-${self:provider.stage}-hello
+  #   handler: dist/serverless/bundles/hello.handler
+  #   memorySize: 2048
+  #   timeout: 10
+  #   environment:
+  #     NODE_ENV: production
+  #   package:
+  #     include:
+  #       - dist/serverless/bundles/hello.js
+  #     exclude:
+  #       - '**'
+  #   events:
+  #     - http:
+  #         path: /
+  #         method: any
+  #     - http:
+  #         path: /{proxy+}
+  #         method: any
+
+
+resources:
+  Resources:
+    ClientAssetsBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:custom.buckets.ASSETS_BUCKET_NAME}
+        CorsConfiguration:
+          CorsRules:
+            -
+              AllowedOrigins:
+                - '*'
+              AllowedHeaders:
+                - '*'
+              AllowedMethods:
+                - GET
+                - HEAD
+                - PUT
+                - POST
+                - DELETE
+              MaxAge: 3000
+              ExposedHeaders:
+                - x-amz-server-side-encryption
+                - x-amz-request-id
+                - x-amz-id-2
+
+    ClientAssetsBucketPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        Bucket:
+          Ref: ClientAssetsBucket
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement: [
+            {
+              Action: ['s3:GetObject'],
+              Effect: 'Allow',
+              Resource: {
+                Fn::Join: ['', ['arn:aws:s3:::', { Ref: 'ClientAssetsBucket' }, '/*']],
+              },
+              Principal: '*'
+            },
+          ]

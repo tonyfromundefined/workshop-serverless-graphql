@@ -35,7 +35,6 @@
 - [React Apollo Hooks](https://github.com/trojanowski/react-apollo-hooks)
 - [GraphQL Code Generator](https://graphql-code-generator.com) 👏
 - [MobX 5](https://github.com/mobxjs/mobx)
-- [styled-components](https://www.styled-components.com) 👏
 
 ### 기타
 - [AWS CloudFormation](https://aws.amazon.com/ko/cloudformation/)
