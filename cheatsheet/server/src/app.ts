@@ -8,7 +8,8 @@ import { prisma } from './generated/prisma'
 
 import * as types from './schema'
 
-const isPlaygroundEnabled = !!Number(process.env.IS_PLAYGROUND_ENABLED || '0')
+const playground = !!Number(process.env.IS_PLAYGROUND_ENABLED || '0')
+const tracing = !!Number(process.env.IS_TRACING_ENABLED || '0')
 
 const app = express()
 
@@ -30,8 +31,9 @@ const server = new ApolloServer({
       typegen: path.resolve('./src/generated', 'nexus.ts'),
     },
   }),
-  introspection: isPlaygroundEnabled,
-  playground: isPlaygroundEnabled,
+  introspection: playground,
+  playground,
+  tracing,
 })
 
 server.applyMiddleware({
