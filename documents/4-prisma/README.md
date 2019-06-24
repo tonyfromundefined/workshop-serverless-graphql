@@ -76,6 +76,7 @@ Prisma는 *Graphcool*이라는 서비스로부터 시작되었습니다.
   ```
   STAGE="development"
   IS_PLAYGROUND_ENABLED="1"
+  IS_TRACING_ENABLED="1"
 
   PRISMA_ENDPOINT="http://prisma.ap-northeast-2.elb.amazonaws.com/serverless/dev"
   PRISMA_MANAGEMENT_API_SECRET="serverless"
@@ -85,6 +86,7 @@ Prisma는 *Graphcool*이라는 서비스로부터 시작되었습니다.
   ```
   STAGE="production"
   IS_PLAYGROUND_ENABLED="0"
+  IS_TRACING_ENABLED="0"
 
   PRISMA_ENDPOINT="http://prisma.ap-northeast-2.elb.amazonaws.com/serverless/prod"
   PRISMA_MANAGEMENT_API_SECRET="serverless"
