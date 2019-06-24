@@ -285,7 +285,8 @@ Prisma는 *Graphcool*이라는 서비스로부터 시작되었습니다.
 
   import * as types from './schema'
 
-  const isPlaygroundEnabled = !!Number(process.env.IS_PLAYGROUND_ENABLED || '0')
+  const playground = !!Number(process.env.IS_PLAYGROUND_ENABLED || '0')
+  const tracing = !!Number(process.env.IS_TRACING_ENABLED || '0')
 
   const app = express()
 
@@ -307,8 +308,9 @@ Prisma는 *Graphcool*이라는 서비스로부터 시작되었습니다.
         typegen: path.resolve('./src/generated', 'nexus.ts'),
       },
     }),
-    introspection: isPlaygroundEnabled,
-    playground: isPlaygroundEnabled,
+    introspection: playground,
+    playground,
+    tracing,
   })
 
   server.applyMiddleware({
