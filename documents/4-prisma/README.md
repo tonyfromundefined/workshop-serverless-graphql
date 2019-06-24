@@ -377,6 +377,7 @@ Prisma는 *Graphcool*이라는 서비스로부터 시작되었습니다.
 - 완성된 서버를 서버리스 환경으로 다시 배포합니다.
 
   ```bash
+  $ yarn build
   $ yarn deploy:dev
   ```
 
