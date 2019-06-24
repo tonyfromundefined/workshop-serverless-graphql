@@ -6,6 +6,7 @@
 - [ ] *Schema-First* vs. *Code-First* 개념에 대해 이해한다
 - [ ] Nexus 문법을 익힌다
 
+
 ## (1) GraphQL이란?
 GraphQL은 API 설계(Schema)와 요청(Query)을 구조화하는 일련의 약속(Interface)입니다. GraphQL을 통해서 우리는 데이터에 기반하여 API를 디자인 할 수 있으며, 클라이언트에서는 정해진 쿼리 언어를 통해 API를 체계적으로 사용 할 수 있습니다.
 - 클라이언트는 서버에 필요한 자원만 요청 할 수 있습니다.
@@ -109,9 +110,7 @@ const User = {
     return parent.username
   },
   posts: (parent, args, context) => {
-    const userId = parent.id
-    const posts = db.table('Post').filter((post) => post.authorId === userId)
-
+    /* parent.id를 통해 DB에서 Post를 가져옵니다 */
     return posts
   },
 }
@@ -127,74 +126,53 @@ const Post = {
     return parent.content
   },
   author: (parent, args, context) => {
-    const authorId = parent.authorId
-    const user = db.table('User').findOne((user) => user.id === authorId)
-
-    if (user) {
-      return user
-
-    } else {
-      throw new Error('Author is not found')
-    }
+    /* parent.authorId를 통해 DB에서 해당 User를 가져옵니다 */
+    return user
   },
 }
 
 const Query = {
   user: (parent, args, context) => {
-    const userId = args.id
-    const user = db.table('User').findOne((user) => user.id === userId)
-
-    if (user) {
-      return user
-
-    } else {
-      throw new Error('User is not found')
-    }
+    /* args.id를 통해 DB에서 해당 User를 가져옵니다 */
+    return user
   },
   post: (parent, args, context) => {
-    const postId = args.id
-    const post = db.table('Post').findOne((post) => post.id === postId)
-
-    if (post) {
-      return post
-
-    } else {
-      throw new Error('User is not found')
-    }
+    /* args.id를 통해 DB에서 해당 Post를 가져옵니다 */
+    return post
   },
 }
 
 const Mutation = {
   createUser: (parent, args, context) => {
-    /* 새 유저를 생성해서 데이터베이스에 삽입합니다 */
+    /* 새 유저를 생성해서 DB에 삽입합니다 */
     return user
   },
   updateUser: (parent, args, context) => {
-    /* args.id를 통해 데이터베이스에서 기존 유저를 불러와 값을 수정 한 뒤 데이터베이스에 삽입합니다 */
+    /* args.id를 통해 DB에서 기존 유저를 불러와 값을 수정 한 뒤 DB에 삽입합니다 */
     return user
   },
   deleteUser: (parent, args, context) => {
-    /* args.id를 통해 데이터베이스에서 기존 유저를 삭제합니다 */
+    /* args.id를 통해 DB에서 기존 유저를 삭제합니다 */
     return user
   },
   createPost: (parent, args, context) => {
-    /* 새 게시물을 생성해서 데이터베이스에 삽입합니다 */
+    /* 새 게시물을 생성해서 DB에 삽입합니다 */
     return post
   },
   updatePost: (parent, args, context) => {
-    /* args.id를 통해 데이터베이스에서 기존 게시물을 불러와 값을 수정 한 뒤 데이터베이스에 삽입합니다 */
+    /* args.id를 통해 DB에서 기존 게시물을 불러와 값을 수정 한 뒤 DB에 삽입합니다 */
     return post
   },
   deletePost: (parent, args, context) => {
-    /* args.id를 통해 데이터베이스에서 기존 게시물을 삭제합니다 */
+    /* args.id를 통해 DB에서 기존 게시물을 삭제합니다 */
     return post
   },
 }
 ```
-> 본 예제 코드에는 이해를 위한 가상의 `db` 변수를 사용했습니다. (실제 동작하지 않은 Pseudo 코드입니다)
+> 본 예제 코드는 리졸버 구조 이해를 위해 작성되었습니다. 실제로는 동작하지 않은 Pseudo 코드입니다.
 
 ### 요청
-클라이언트가 다음과 같은 문법으로 서버에 요청을 날릴 수 있습니다.
+클라이언트가 다음과 같은 문법으로 서버에 요청을 날리게 되면,
 
 ```graphql
 query {
@@ -321,8 +299,9 @@ GraphQL에 대해 이해하셨나요? 앞서 말씀드린 *Code-First* 개발 �
   - `.env.development`
     
     ```
-    STAGE = "development"
-    IS_PLAYGROUND_ENABLED = "1"
+    STAGE="development"
+    IS_PLAYGROUND_ENABLED="1"
+    IS_TRACING_ENABLED="1"
 
     PRISMA_ENDPOINT="{endpoint}/{service}/{stage}"
     PRISMA_MANAGEMENT_API_SECRET="{managementApiSecret}"
@@ -331,8 +310,9 @@ GraphQL에 대해 이해하셨나요? 앞서 말씀드린 *Code-First* 개발 �
   - `.env.production`
     
     ```
-    STAGE = "production"
-    IS_PLAYGROUND_ENABLED = "0"
+    STAGE="production"
+    IS_PLAYGROUND_ENABLED="1"
+    IS_TRACING_ENABLED="1"
 
     PRISMA_ENDPOINT="{endpoint}/{service}/{stage}"
     PRISMA_MANAGEMENT_API_SECRET="{managementApiSecret}"
