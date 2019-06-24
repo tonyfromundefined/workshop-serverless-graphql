@@ -92,7 +92,7 @@ Prisma는 *Graphcool*이라는 서비스로부터 시작되었습니다.
   PRISMA_MANAGEMENT_API_SECRET="serverless"
   ```
 
-- CLI에서 다음과 같이 입력합니다.
+- 다음과 같이 CLI에 입력하면, `datamodel.prisma` 파일을 통해 RDBMS에 테이블을 생성하고, Prisma에 오브젝트 타입과 CRUD 쿼리/뮤테이션을 생성합니다.
 
   ```bash
   yarn prisma:deploy:dev
