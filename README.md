@@ -5,7 +5,7 @@
 
 ![](./full-architecture-3.png)
 
-> 본 워크샵은 AWSKRUG 서버리스 모임이 주최합니다.
+> 본 워크샵은 AWSKRUG 서버리스 모임이 주최합니다. [참가신청](https://www.meetup.com/ko-KR/awskrug/events/262459287/)
 >
 > 🖋 Written with 🔥 by [Tony](https://github.com/tonyfromundefined)
 
