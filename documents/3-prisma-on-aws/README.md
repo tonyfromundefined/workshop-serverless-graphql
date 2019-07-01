@@ -17,7 +17,7 @@ Prisma를 AWS 위에서 사용하기 위해서는
 
 
 ## CloudFormation 템플릿으로 Prisma를 AWS에 배포하기
-CloudFormation 역시 Serverless Framework과 같은 IaC의 일종입니다. CloudFormation은 AWS에서 제공하는 기본 IaC로, AWS 내 모든 자원들을 한번에 배포하거나 수정, 삭제 할 수 있습니다.
+CloudFormation 역시 Serverless Framework과 같은 IaC의 일종입니다. CloudFormation은 AWS에서 제공하는 기본 IaC로, AWS 내 모든 자원들을 한번에 배포하거나 수정, 삭제할 수 있습니다.
 
 자, 그럼 CloudFormation을 통해 쉽게 Prisma를 AWS에 배포해볼까요?
 
@@ -27,7 +27,7 @@ CloudFormation 역시 Serverless Framework과 같은 IaC의 일종입니다. Clo
 
 > 다음 템플릿에 포함된 Fargate 서비스는 과금됩니다. 💰 [요금표](https://aws.amazon.com/ko/fargate/pricing/)
 
-> [Aurora](https://aws.amazon.com/ko/rds/aurora/)는 AWS에서 만든 MySQL 호환 RDBMS입니다. [Aurora Serverless](https://aws.amazon.com/ko/rds/aurora/serverless/)를 사용하게 되면 인스턴스 관리가 필요없는 DB를 사용 할 수 있습니다. (Aurora Serverless는 프리티어가 제공되지 않으므로 과금됩니다 💰 [요금표](https://aws.amazon.com/ko/rds/aurora/serverless/))
+> [Aurora](https://aws.amazon.com/ko/rds/aurora/)는 AWS에서 만든 MySQL 호환 RDBMS입니다. [Aurora Serverless](https://aws.amazon.com/ko/rds/aurora/serverless/)를 사용하게 되면 인스턴스 관리가 필요없는 DB를 사용할 수 있습니다. (Aurora Serverless는 프리티어가 제공되지 않으므로 과금됩니다 💰 [요금표](https://aws.amazon.com/ko/rds/aurora/serverless/))
 
 - [AWS Console](https://console.aws.amazon.com)에 로그인 후 `Find Services`에서 `CloudFormation`을 검색, 클릭합니다.
 ![](./images/screenshot-1.png)
@@ -63,11 +63,11 @@ CloudFormation 역시 Serverless Framework과 같은 IaC의 일종입니다. Clo
 - 스택 생성을 진행합니다.
 ![](./images/screenshot-11.png)
 
-- 스택 생성이 완료되면, `Outputs` 탭에서 Prisma Endpoint를 확인 할 수 있습니다.
+- 스택 생성이 완료되면, `Outputs` 탭에서 Prisma Endpoint를 확인할 수 있습니다.
 ![](./images/screenshot-12.png)
 ![](./images/screenshot-13.png)
 
-- 웹브라우저에서 생성된 Prisma Endpoint으로 접속해보면, 빈 GraphQL Playground를 확인 할 수 있습니다.
+- 웹브라우저에서 생성된 Prisma Endpoint으로 접속해보면, 빈 GraphQL Playground를 확인할 수 있습니다.
 ![](./images/screenshot-14.png)
 
 

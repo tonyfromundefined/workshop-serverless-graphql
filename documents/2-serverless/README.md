@@ -28,7 +28,7 @@ AWS 계정 내 자원들을 내 컴퓨터에서 사용하기 위해서는 권한
 - `Create user` 버튼을 클릭합니다.
 ![](./images/screenshot-6.png)
 
-- `Access key ID`와 `Secret access key`를 **안전한** 로컬 메모장에 복사해 붙여넣어 둡니다. (이 창을 떠나면 다시 확인 할 수 없습니다)
+- `Access key ID`와 `Secret access key`를 **안전한** 로컬 메모장에 복사해 붙여넣어 둡니다. (이 창을 떠나면 다시 확인할 수 없습니다)
   > 해커들은 비트코인 채굴을 위해 Access Key ID와 Secret access key를 24시간 호시탐탐 노리고 있습니다. 코드 내 삽입하여 GitHub 등 코드 저장소에 업로드 할 경우, 수천~수만달러 과금이 될 수 있습니다.
 - `Close` 버튼을 클릭합니다.
   ![](./images/screenshot-7.png)
@@ -92,7 +92,7 @@ AWS 계정 내 자원들을 내 컴퓨터에서 사용하기 위해서는 권한
 
 
 ## (3) Serverless Framework을 사용해 Node.js 프로젝트 배포하기
-Serverless Framework은 IaC(Insfrastructure as Code)의 일종으로, 코드를 통해 원하는 Serverless 환경을 깔끔하게 구성 할 수 있습니다. Serverless Framework은 `serverless.yml` 설정 파일을 기반으로 구동됩니다.
+Serverless Framework은 IaC(Insfrastructure as Code)의 일종으로, 코드를 통해 원하는 Serverless 환경을 깔끔하게 구성할 수 있습니다. Serverless Framework은 `serverless.yml` 설정 파일을 기반으로 구동됩니다.
 
 ### 아키텍쳐
 
@@ -165,7 +165,7 @@ $ yarn build
 $ yarn deploy:dev
 ```
 
-잠시 기다리면, 배포가 완료된 모습을 확인 할 수 있습니다.
+잠시 기다리면, 배포가 완료된 모습을 확인할 수 있습니다.
 
 
 ## 학습 목표 확인하기

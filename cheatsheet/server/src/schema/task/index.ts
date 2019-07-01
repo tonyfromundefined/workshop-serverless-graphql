@@ -5,7 +5,7 @@ export const Task = prismaObjectType({
   definition(t) {
     t.prismaFields(['*'])
 
-    // 또는 다음과 같이 원하는 필드만 노출 할 수 있습니다.
+    // 또는 다음과 같이 원하는 필드만 노출할 수 있습니다.
     // t.prismaFields(['content', 'isDone'])
   },
 })

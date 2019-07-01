@@ -15,7 +15,7 @@ Prisma는 *Graphcool*이라는 서비스로부터 시작되었습니다.
 #### Graphcool
 ![](./images/diagram-1.png)
 
-*Graphcool*은 GraphQL 기반 오픈소스 BaaS(Backend as a service)로, 프론트엔드 개발자들이 더 쉽게 백엔드를 개발 할 수 있도록 도와주는 서비스입니다. GraphQL SDL(Schema Definition Language) 기반으로 데이터 모델을 구축하면 *Graphcool*이 이를 인식, 오브젝트 타입부터 CRUD(Create, Read, Update, Delete) 쿼리/뮤테이션을 생성해주는 서비스입니다. Prisma는 해당 서비스를 2년간 운영하면서 **몇가지 문제점들**을 만났습니다.
+*Graphcool*은 GraphQL 기반 오픈소스 BaaS(Backend as a service)로, 프론트엔드 개발자들이 더 쉽게 백엔드를 개발할 수 있도록 도와주는 서비스입니다. GraphQL SDL(Schema Definition Language) 기반으로 데이터 모델을 구축하면 *Graphcool*이 이를 인식, 오브젝트 타입부터 CRUD(Create, Read, Update, Delete) 쿼리/뮤테이션을 생성해주는 서비스입니다. Prisma는 해당 서비스를 2년간 운영하면서 **몇가지 문제점들**을 만났습니다.
 
 - *Graphcool*은 사용하기 쉽기 때문에 큰 사랑을 받았습니다. 개발자는 빠른 프로토타이핑을 위해 이 도구를 적극적으로 사용했지만, 실제 프로덕션 환경에서 자체 GraphQL 서버를 구축 할 때는 이 도구를 사용하기 힘들었습니다.
 - 백엔드 개발자는 보다 많은 제어와 유연성을 원했습니다. 예를 들면 다음과 같습니다.
@@ -25,15 +25,14 @@ Prisma는 *Graphcool*이라는 서비스로부터 시작되었습니다.
 
 #### Prisma 1.0 + Prisma Bindings
 ![](./images/diagram-2.png)
-이를 해결하기 위해, *Graphcool*의 *Query Engine* 컴포넌트를 가지고 *Prisma bindings*라는 새로운 서비스를 출시하게 되었습니다. 이를 통해, Prisma가 SDL(Schema Definition Language)을 기반으로 자동으로 생성해준 GraphQL CRUD 쿼리/뮤테이션을 GraphQL API에 포함하여 빠르게 백엔드를 개발 할 수 있습니다.
+이를 해결하기 위해, *Graphcool*의 *Query Engine* 컴포넌트를 가지고 *Prisma bindings*라는 새로운 서비스를 출시하게 되었습니다. 이를 통해, Prisma가 SDL(Schema Definition Language)을 기반으로 자동으로 생성해준 GraphQL CRUD 쿼리/뮤테이션을 GraphQL API에 포함하여 빠르게 백엔드를 개발할 수 있습니다.
 
 또한 회사 브랜드 역시 *Graphcool*에서 *Prisma*로 완전히 전환하고, 앞으로 Prisma에 더 집중하게 됩니다.
 
 #### Prisma Client
 ![](./images/diagram-3.png)
-이에 더 나아가서, Prisma는 Prisma Client라는 신규 라이브러리를 통해 API 환경이 GraphQL이 아니더라도 ORM과 같이 Prisma를 사용 할 수 있게 하였습니다. GraphQL의 타입 시스템을 기반으로 만들어진 Type-Safe ORM은 백엔드 개발에 날개를 달아줍니다.
+이에 더 나아가서, Prisma는 Prisma Client라는 신규 라이브러리를 통해 API 환경이 GraphQL이 아니더라도 ORM과 같이 Prisma를 사용할 수 있게 하였습니다. GraphQL의 타입 시스템을 기반으로 만들어진 Type-Safe ORM은 백엔드 개발에 날개를 달아줍니다.
 
-### Prisma를 통해 테이블과 CRUD 생성
 일반적인 ORM과 비슷하게,
 
 - 다음과 같이 SDL을 통해 타입을 정의하고
@@ -110,7 +109,7 @@ Prisma는 *Graphcool*이라는 서비스로부터 시작되었습니다.
   ![](./images/screenshot-3.png)
 
 
-- CLI 결과로 출력된 엔드포인트를 웹브라우저에 입력하면, Prisma 내부의 GraphQL Playground를 확인 할 수 있습니다. GraphQL Playground 내 하단의 `HTTP HEADERS`내에 발급한 토큰을 삽입해주면, Prisma가 생성한 CRUD 쿼리/뮤테이션을 확인 할 수 있습니다.
+- CLI 결과로 출력된 엔드포인트를 웹브라우저에 입력하면, Prisma 내부의 GraphQL Playground를 확인할 수 있습니다. GraphQL Playground 내 하단의 `HTTP HEADERS`내에 발급한 토큰을 삽입해주면, Prisma가 생성한 CRUD 쿼리/뮤테이션을 확인할 수 있습니다.
 
   ```json
   {
@@ -119,14 +118,14 @@ Prisma는 *Graphcool*이라는 서비스로부터 시작되었습니다.
   ```
   ![](./images/screenshot-4.png)
 
-- 또, CLI 결과로 출력된 `Prisma Admin` 링크로 들어가면, 데이터를 생성, 수정, 삭제 할 수 있는 어드민 페이지를 확인 할 수 있습니다. 우측 상단 설정 버튼을 눌러 토큰을 입력해줍니다.
+- 또, CLI 결과로 출력된 `Prisma Admin` 링크로 들어가면, 데이터를 생성, 수정, 삭제할 수 있는 어드민 페이지를 확인할 수 있습니다. 우측 상단 설정 버튼을 눌러 토큰을 입력해줍니다.
 ![](./images/screenshot-5.png)
 ![](./images/screenshot-6.png)
 
-- 올바른 토큰임이 확인되면, 데이터를 생성, 수정, 삭제 할 수 있습니다.
+- 올바른 토큰임이 확인되면, 데이터를 생성, 수정, 삭제할 수 있습니다.
 ![](./images/screenshot-7.png)
 
-  > CLI에 다음 명령어를 입력하면 토큰 입력 과정 없이 Prisma Admin을 바로 사용 할 수 있습니다.
+  > CLI에 다음 명령어를 입력하면 토큰 입력 과정 없이 Prisma Admin을 바로 사용할 수 있습니다.
   >
   >  ```bash
   >  $ yarn prisma:admin:dev
@@ -321,7 +320,7 @@ Prisma는 *Graphcool*이라는 서비스로부터 시작되었습니다.
   ```
 
 - Nexus의 `objectType` 함수를 Nexus Prisma의 `prismaObjectType`으로 변경해줍니다.
-- `prismaObjectType`의 definition 내에 `t.prismaFields`를 사용 할 수 있게되며, Prisma가 생성한 타입 내 속성들을 노출 할 수 있습니다.
+- `prismaObjectType`의 definition 내에 `t.prismaFields`를 사용할 수 있게되며, Prisma가 생성한 타입 내 속성들을 노출할 수 있습니다.
 
   #### `/src/schema/task/index.ts`
   ```typescript
@@ -332,7 +331,7 @@ Prisma는 *Graphcool*이라는 서비스로부터 시작되었습니다.
     definition(t) {
       t.prismaFields(['*'])
 
-      // 또는 다음과 같이 원하는 필드만 노출 할 수 있습니다.
+      // 또는 다음과 같이 원하는 필드만 노출할 수 있습니다.
       // t.prismaFields(['content', 'isDone'])
     },
   })
@@ -372,7 +371,7 @@ Prisma는 *Graphcool*이라는 서비스로부터 시작되었습니다.
   })
   ```
 
-  > 다음과 같이 기본적인 CRUD를 Prisma를 이용해 쉽게 만들어 붙일 수 있습니다. 또한, Nexus 내부의 TypeScript 타이핑을 통해 간혹 발생 할 수 있는 실수를 줄여줍니다.
+  > 다음과 같이 기본적인 CRUD를 Prisma를 이용해 쉽게 만들어 붙일 수 있습니다. 또한, Nexus 내부의 TypeScript 타이핑을 통해 간혹 발생할 수 있는 실수를 줄여줍니다.
 
 - 완성된 서버를 서버리스 환경으로 다시 배포합니다.
 
@@ -381,7 +380,7 @@ Prisma는 *Graphcool*이라는 서비스로부터 시작되었습니다.
   $ yarn deploy:dev
   ```
 
-자 이제 API를 완성하고 배포까지 끝냈으니, 웹 클라이언트에서 GraphQL을 어떻게 사용 할 수 있는지 알아볼까요?
+자 이제 API를 완성하고 배포까지 끝냈으니, 웹 클라이언트에서 GraphQL을 어떻게 사용할 수 있는지 알아볼까요?
 
 ## 학습 목표 확인하기
 - [x] Prisma에 대해 이해한다
