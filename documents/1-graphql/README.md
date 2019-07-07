@@ -518,7 +518,7 @@ export const TaskMutations = extendType({
       resolve: async (_parent, args) => {
         const taskIndex = TASKS.findIndex((task) => task.id === args.id)
 
-        if (taskIndex) {
+        if (taskIndex > -1) {
           if (args.content) {
             TASKS[taskIndex].content = args.content
           }
@@ -544,7 +544,7 @@ export const TaskMutations = extendType({
       resolve: async (_parent, args) => {
         const taskIndex = TASKS.findIndex((task) => task.id === args.id)
 
-        if (taskIndex) {
+        if (taskIndex > -1) {
           const task = TASKS[taskIndex]
           TASKS.splice(taskIndex, 1)
 
