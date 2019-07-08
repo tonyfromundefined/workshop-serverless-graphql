@@ -453,7 +453,9 @@ export const TaskQueries = extendType({
     t.field('task', {
       type: 'Task',
       args: {
-        id: idArg(),
+        id: idArg({
+          required: true,
+        }),
       },
       resolve: (_parent, args) => {
         const task = TASKS.find((task) => task.id === args.id)
