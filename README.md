@@ -114,8 +114,9 @@
 Feature Request를 원하시면, 새 이슈를 생성해주세요. 또한, Pull Request는 언제나 환영입니다.🙏
 
 - [x] macOS
-- [ ] Windows
-  - [ ] CMD
+- [x] Windows
+  - [x] CMD
+  - [x] Powershell
   - [ ] WSL Bash
 
 ---
