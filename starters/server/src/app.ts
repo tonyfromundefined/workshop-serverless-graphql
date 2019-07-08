@@ -4,7 +4,7 @@ import express from 'express'
 import { makeSchema } from 'nexus'
 import path from 'path'
 
-import * as types from './schema'
+import * as types from './resolvers'
 
 const playground = !!Number(process.env.IS_PLAYGROUND_ENABLED || '0')
 const tracing = !!Number(process.env.IS_TRACING_ENABLED || '0')

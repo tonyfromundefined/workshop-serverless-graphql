@@ -6,7 +6,7 @@ import path from 'path'
 import datamodelInfo from './generated/nexus-prisma'
 import { prisma } from './generated/prisma'
 
-import * as types from './schema'
+import * as types from './resolvers'
 
 const playground = !!Number(process.env.IS_PLAYGROUND_ENABLED || '0')
 const tracing = !!Number(process.env.IS_TRACING_ENABLED || '0')

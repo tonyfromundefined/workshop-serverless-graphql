@@ -133,11 +133,11 @@ Prisma는 *Graphcool*이라는 서비스로부터 시작되었습니다.
 
 
 ## (3) Prisma Client 사용해보기
-아까 만든 `task` schema를 Prisma Client를 사용해 구현해볼까요?
+아까 만든 `task` 관련 Resolver를 Prisma Client를 사용해 구현해볼까요?
 
 - 리졸버 내 기존 목업 DB를 삭제하고 Prisma Client를 이용해 데이터를 가져와서 `return` 합니다.
 
-  #### `/src/schema/task/Query.ts`
+  #### `/src/resolvers/task/Query.ts`
   ```typescript
   import { extendType, idArg } from 'nexus'
   import { prisma } from '~/generated/prisma'
@@ -178,7 +178,7 @@ Prisma는 *Graphcool*이라는 서비스로부터 시작되었습니다.
 
 - 마찬가지로 `createTask`, `updateTask`, `deleteTask` 내에서도 기존 목업 DB 조작 로직을 삭제하고 Prisma Client를 이용해 데이터를 수정해 `return` 합니다.
 
-  #### `/src/schema/task/Mutation.ts`
+  #### `/src/resolvers/task/Mutation.ts`
   ```typescript
   import { booleanArg, extendType, idArg, stringArg } from 'nexus'
   import { prisma } from '~/generated/prisma'
@@ -242,7 +242,7 @@ Prisma는 *Graphcool*이라는 서비스로부터 시작되었습니다.
 
 - 기존에 생성해줬던 목업 DB를 삭제합니다.
 
-  #### `/src/schema/task/index.ts`
+  #### `/src/resolvers/task/index.ts`
   ```typescript
   import { objectType } from 'nexus'
 
@@ -282,7 +282,7 @@ Prisma는 *Graphcool*이라는 서비스로부터 시작되었습니다.
   import datamodelInfo from './generated/nexus-prisma'
   import { prisma } from './generated/prisma'
 
-  import * as types from './schema'
+  import * as types from './resolvers'
 
   const playground = !!Number(process.env.IS_PLAYGROUND_ENABLED || '0')
   const tracing = !!Number(process.env.IS_TRACING_ENABLED || '0')
@@ -322,7 +322,7 @@ Prisma는 *Graphcool*이라는 서비스로부터 시작되었습니다.
 - Nexus의 `objectType` 함수를 Nexus Prisma의 `prismaObjectType`으로 변경해줍니다.
 - `prismaObjectType`의 definition 내에 `t.prismaFields`를 사용할 수 있게되며, Prisma가 생성한 타입 내 속성들을 노출할 수 있습니다.
 
-  #### `/src/schema/task/index.ts`
+  #### `/src/resolvers/task/index.ts`
   ```typescript
   import { prismaObjectType } from 'nexus-prisma'
 
@@ -341,7 +341,7 @@ Prisma는 *Graphcool*이라는 서비스로부터 시작되었습니다.
   ```
 
 - `task`와 `tasks` 쿼리를 연결해줍니다.
-  #### `/src/schema/task/Query.ts`
+  #### `/src/resolvers/task/Query.ts`
   ```typescript
   import { prismaExtendType } from 'nexus-prisma'
 
@@ -355,7 +355,7 @@ Prisma는 *Graphcool*이라는 서비스로부터 시작되었습니다.
 
 - `createTask`, `updateTask`, `deleteTask` 뮤테이션을 연결해줍니다.
 
-  #### `/src/schema/task/Mutation.ts`
+  #### `/src/resolvers/task/Mutation.ts`
   ```typescript
   import { prismaExtendType } from 'nexus-prisma'
 

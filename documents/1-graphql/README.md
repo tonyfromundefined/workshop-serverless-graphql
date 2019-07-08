@@ -261,7 +261,7 @@ GraphQL에 대해 이해하셨나요? 앞서 말씀드린 *Code-First* 개발 �
   - `app.ts`에서 API 서버를 가져와 `aws-serverless-express`를 사용하여, Lambda 요청에 응답하는 함수를 초기화합니다.
   - API Gateway와 Lambda 기반의 서버리스 환경에 배포 할 때 사용합니다.
 
-#### `/src/schema/`
+#### `/src/resolvers/`
 - `index.ts`
   - 엔트리 파일입니다. `Query.ts`와 `Mutation.ts`가 내보낸 항목을 다시 내보내는 역할을 합니다.
 - `Query.ts`
@@ -329,7 +329,7 @@ GraphQL에 대해 이해하셨나요? 앞서 말씀드린 *Code-First* 개발 �
 
 - Nexus 기반으로 작성된 `Query`와 `Mutation` 살펴보기
 
-  #### `/src/schema/Query.ts`
+  #### `/src/resolvers/Query.ts`
   ```typescript
   import { queryType } from 'nexus'
 
@@ -344,7 +344,7 @@ GraphQL에 대해 이해하셨나요? 앞서 말씀드린 *Code-First* 개발 �
   })
   ```
 
-  #### `/src/schema/Mutation.ts`
+  #### `/src/resolvers/Mutation.ts`
   ```typescript
   import { mutationType } from 'nexus'
 
@@ -400,17 +400,17 @@ mutation {
 
 
 ## (5) `Task` 타입과 쿼리, 뮤테이션 만들기
-자 이제 우리만의 타입을 하나 만들어봅시다. `/src/schema` 폴더 내에 `task` 폴더를 새로 생성해줍니다. 그리고 그 아래
+자 이제 우리만의 타입을 하나 만들어봅시다. `/src/resolvers` 폴더 내에 `task` 폴더를 새로 생성해줍니다. 그리고 그 아래
 
-- `/src/schema/task/index.ts` (`Task` 타입 정의 및 Query, Mutation을 받아서 export)
-- `/src/schema/task/Query.ts` (`Query` 타입을 확장)
-- `/src/schema/task/Mutation.ts` (`Mutation` 타입을 확장)
+- `/src/resolvers/task/index.ts` (`Task` 타입 정의 및 Query, Mutation을 받아서 export)
+- `/src/resolvers/task/Query.ts` (`Query` 타입을 확장)
+- `/src/resolvers/task/Mutation.ts` (`Mutation` 타입을 확장)
 
 파일을 생성해줍니다.
 
 각 파일을 작성해볼까요?
 
-#### `/src/schema/task/index.ts`
+#### `/src/resolvers/task/index.ts`
 ```typescript
 import { objectType } from 'nexus'
 
@@ -442,7 +442,7 @@ export * from './Query'
 export * from './Mutation'
 ```
 
-#### `/src/schema/task/Query.ts`
+#### `/src/resolvers/task/Query.ts`
 ```typescript
 import { extendType, idArg } from 'nexus'
 import { TASKS } from './'
@@ -477,7 +477,7 @@ export const TaskQueries = extendType({
 })
 ```
 
-#### `/src/schema/task/Mutation.ts`
+#### `/src/resolvers/task/Mutation.ts`
 ```typescript
 import { booleanArg, extendType, idArg, stringArg } from 'nexus'
 import short from 'short-uuid'
@@ -561,7 +561,7 @@ export const TaskMutations = extendType({
 
 기존 schema 엔트리 파일을 수정해, Task 엔트리 파일을 내보냅니다.
 
-#### `/src/schema/index.ts`
+#### `/src/resolvers/index.ts`
 ```typescript
 export * from './Query'
 export * from './Mutation'
