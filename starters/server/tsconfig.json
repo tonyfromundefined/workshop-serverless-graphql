@@ -5,7 +5,7 @@
     "lib": [
       "esnext",
     ],
-    "module": "es6",
+    "module": "commonjs",
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "noUnusedLocals": true,
