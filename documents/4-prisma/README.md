@@ -140,7 +140,7 @@ Prisma는 *Graphcool*이라는 서비스로부터 시작되었습니다.
   #### `/src/resolvers/task/Query.ts`
   ```typescript
   import { extendType, idArg } from 'nexus'
-  import { prisma } from '~/generated/prisma'
+  import { prisma } from '../../generated/prisma'
 
   export const TaskQueries = extendType({
     type: 'Query',
@@ -181,7 +181,7 @@ Prisma는 *Graphcool*이라는 서비스로부터 시작되었습니다.
   #### `/src/resolvers/task/Mutation.ts`
   ```typescript
   import { booleanArg, extendType, idArg, stringArg } from 'nexus'
-  import { prisma } from '~/generated/prisma'
+  import { prisma } from '../../generated/prisma'
 
   export const TaskMutations = extendType({
     type: 'Mutation',
