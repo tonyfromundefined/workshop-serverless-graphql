@@ -5,7 +5,3 @@ secret: 03ef7cac
 generate:
   - generator: typescript-client
     output: ./src/generated/prisma/
-
-hooks:
-  post-deploy:
-    - nexus-prisma-generate --output ./src/generated/nexus-prisma
