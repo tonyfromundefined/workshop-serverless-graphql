@@ -5,3 +5,9 @@ yarn-error.log
 
 dist
 .serverless
+
+.env
+.env.development
+.env.production
+
+generated

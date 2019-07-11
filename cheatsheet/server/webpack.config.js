@@ -1,4 +1,5 @@
 const path = require('path')
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 const WebpackbarPlugin = require('webpackbar')
 
 module.exports = {
@@ -34,5 +35,6 @@ module.exports = {
       name: 'Server (Production)',
       color: '#fa5252',
     }),
+    new ForkTsCheckerWebpackPlugin(),
   ],
 }
