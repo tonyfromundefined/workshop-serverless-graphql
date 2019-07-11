@@ -87,7 +87,7 @@ class App extends NextApp<any> {
     return (
       <Container>
         <Head>
-          <title>Hello, Next.js</title>
+          <title>Hello, AWSKRUG</title>
           <link rel='shortcut icon' href={FaviconImage} />
         </Head>
         <ApolloHookProvider client={this.props.apolloClient}>
