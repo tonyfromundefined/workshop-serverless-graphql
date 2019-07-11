@@ -272,7 +272,7 @@ GraphQL에 대해 이해하셨나요? 앞서 말씀드린 *Code-First* 개발 �
 #### `/src/generated`
 - `schema.graphql`
   - Nexus가 자동 생성한 Schema 입니다.
-- `typegen.ts`
+- `nexus.ts`
   - Nexus가 자동 생성한 TypeScript Typing 입니다.
 
 
@@ -361,7 +361,7 @@ GraphQL에 대해 이해하셨나요? 앞서 말씀드린 *Code-First* 개발 �
 
   다음과 같이 Nexus를 통해서 코드를 작성하면, Nexus가 해당 코드를 이용해 `/src/generated/schema.graphql`을 자동으로 생성해줍니다. 따라서, *Schema-First*에서 존재했던 문제점인 **스키마 정의와 리졸버 간의 불일치 문제**와 **Schema 작성 문제**를 해결할 수 있습니다.
 
-  추가적으로 Nexus가 `/src/generated/typegen.ts`에 TypeScript 타이핑을 자동으로 생성해주기 때문에, GraphQL 타입 환경을 TypeScript 환경과 결합하여 초월적인 개발 편의성을 만끽할 수 있습니다. (**IDE 지원 부족으로 인한 낮은 개발 경험** 문제 해결)
+  추가적으로 Nexus가 `/src/generated/nexus.ts`에 TypeScript 타이핑을 자동으로 생성해주기 때문에, GraphQL 타입 환경을 TypeScript 환경과 결합하여 초월적인 개발 편의성을 만끽할 수 있습니다. (**IDE 지원 부족으로 인한 낮은 개발 경험** 문제 해결)
 
   #### `/src/generated/schema.graphql`
   ```graphql
