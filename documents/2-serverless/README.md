@@ -73,20 +73,13 @@ AWS 계정 내 자원들을 내 컴퓨터에서 사용하기 위해서는 권한
 ![](./images/screenshot-12.png)
 
 
-## (2) AWS CLI로 내 컴퓨터에 IAM 사용자 등록하기
-> 아직 AWS CLI를 설치하지 않으셨나요? 핸즈온 진행을 위해서는 AWS CLI가 꼭 필요합니다. 아래 링크를 통해 AWS CLI를 컴퓨터에 설치해주세요.
-- [AWS CLI 설치하기](https://aws.amazon.com/ko/cli/)
-![](./images/screenshot-13.png)
-
-- 아래 명령어를 CLI에 입력합니다
+## (2) 내 컴퓨터에 IAM 사용자 등록하기
+- `server` 폴더에서 아래 명령어를 CLI에 입력합니다
 
   ```bash
-  $ aws configure --profile SERVERLESS_WORKSHOP
+  $ npx sls config credentials --provider aws --key (내 Access Key ID) --secret (내 Secret Access Key) --profile SERVERLESS_WORKSHOP -o
   ```
-  ![](./images/screenshot-14.png)
-
-- `AWS Access Key ID`와 `Secret Access Key`, `Default region name`을 넣을 수 있는 란이 나오면, 아까 적어두었던 문자열과 `ap-northeast-2`를 붙여넣어줍니다. (`ap-northeast-2`는 AWS 서울 리전을 의미합니다)
-![](./images/screenshot-15.png)
+  ![](./images/screenshot-16.png)
 
 > 주입한 설정 내역은 `~/.aws/credentials`에 저장됩니다.
 
