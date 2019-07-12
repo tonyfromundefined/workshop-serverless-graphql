@@ -84,9 +84,6 @@
 ### 5. Node.js
 - Node.js 최신 버전 [다운로드](https://nodejs.org/en/)
 
-### 6. AWS CLI
-- AWS CLI 설치하기 [다운로드](https://aws.amazon.com/ko/cli/)
-
 
 ## 자 그럼 이제 시작해볼까요?
 1. [GraphQL 살펴보기](/documents/1-graphql/README.md)
