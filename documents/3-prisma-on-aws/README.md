@@ -70,6 +70,14 @@ CloudFormation 역시 Serverless Framework과 같은 IaC의 일종입니다. Clo
 - 웹브라우저에서 생성된 Prisma Endpoint으로 접속해보면, 빈 GraphQL Playground를 확인할 수 있습니다.
 ![](./images/screenshot-14.png)
 
+> ECS Service Linked Role 관련 오류가 발생한 경우
+>
+>  ```bash
+>  $ aws iam create-service-linked-role --aws-service-name ecs.amazonaws.com
+>  ```
+>
+>  를 터미널에 입력합니다
+
 
 ## 학습 목표 확인하기
 - [x] Prisma를 AWS 상에 띄운다
