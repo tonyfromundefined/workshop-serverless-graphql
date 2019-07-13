@@ -4,7 +4,7 @@ provider:
   name: aws
   runtime: nodejs8.10
   stage: ${opt:stage, 'dev'}
-  region: ap-northeast-2
+  region: ap-northeast-1
   profile: SERVERLESS_WORKSHOP
 
 package:

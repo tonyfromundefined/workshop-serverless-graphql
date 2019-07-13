@@ -34,7 +34,7 @@
     
   ```
   NEXT_APP_STAGE = "development"
-  NEXT_APP_GRAPHQL_ENDPOINT = "https://fyeitajxaa.execute-api.ap-northeast-2.amazonaws.com/dev/graphql"
+  NEXT_APP_GRAPHQL_ENDPOINT = "https://fyeitajxaa.execute-api.ap-northeast-1.amazonaws.com/dev/graphql"
   NEXT_APP_VERSION = "0.0.1"
   ```
   
@@ -42,7 +42,7 @@
     
   ```
   NEXT_APP_STAGE = "production"
-  NEXT_APP_GRAPHQL_ENDPOINT = "https://fyeitajxaa.execute-api.ap-northeast-2.amazonaws.com/dev/graphql"
+  NEXT_APP_GRAPHQL_ENDPOINT = "https://fyeitajxaa.execute-api.ap-northeast-1.amazonaws.com/dev/graphql"
   NEXT_APP_VERSION = "0.0.1"
   ```
 
