@@ -21,7 +21,7 @@ CloudFormation 역시 Serverless Framework과 같은 IaC의 일종입니다. Clo
 
 자, 그럼 CloudFormation을 통해 쉽게 Prisma를 AWS에 배포해볼까요?
 
-- 둘 중에 원하는 템플릿을 다운로드 받습니다.
+- 둘 중에 원하는 템플릿을 다운로드 받습니다. (오른쪽 클릭 후 `다른 이름으로 링크 저장...`)
   - MySQL 템플릿 [다운로드](https://raw.githubusercontent.com/tonyfromundefined/serverless-graphql-workshop/master/templates/prisma.mysql.yml)
   - Aurora Serverless 템플릿 [다운로드](https://raw.githubusercontent.com/tonyfromundefined/serverless-graphql-workshop/master/templates/prisma.aurora.serverless.yml)
 
