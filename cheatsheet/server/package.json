@@ -24,7 +24,7 @@
     "prisma:admin:prod": "prisma admin -e .env.production"
   },
   "dependencies": {
-    "apollo-server-express": "^2.6.3",
+    "apollo-server-express": "^2.14.2",
     "aws-serverless-express": "^3.3.6",
     "cors": "^2.8.5",
     "express": "^4.17.1",
